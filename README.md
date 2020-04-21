@@ -31,6 +31,7 @@ Version information:
 
 v0.0 - Updated 2020/04/21, updated graphicsUtil.py, autograder.py, grading.py, searchTestClasses.py
        Tests cases 1-5 were possible, TC6 not possible, of the Problem 1: Depth First Search (DFS)
+       
 v0.1 - Update 2020/04/21, new layoutMO416.lay developped and included in the folder layout. The following command is possible now:
        python pacman.py -l layoutMO416 -p SearchAgent -a fn=dfs
 
