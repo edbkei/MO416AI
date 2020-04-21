@@ -24,3 +24,5 @@
 11- Test new layout output.txt
 
 12- Test shall be possible with: python pacman.py -p AlphaBetaAgent -a depth=3 -l smallClassic in Pycharm.
+
+13- Single search agent using Prototype3: python pacman.py -l bigMaze -p SearchAgent -a fn=dfs, where instead of bigMaze, other options are possible as seen in layouts folder.
