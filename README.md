@@ -26,3 +26,10 @@
 12- Test shall be possible with: python pacman.py -p AlphaBetaAgent -a depth=3 -l smallClassic in Pycharm.
 
 13- Single search agent using Prototype3: python pacman.py -l bigMaze -p SearchAgent -a fn=dfs, where instead of bigMaze, other options are possible as seen in layouts folder.
+
+Version information:
+
+v0.0 - Updated 2020/04/21, updated graphicsUtil.py, autograder.py, grading.py, searchTestClasses.py
+       Tests cases 1-5 were possible, TC6 not possible, of the Problem 1: Depth First Search (DFS)
+
+
