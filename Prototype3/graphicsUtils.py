@@ -291,13 +291,23 @@ def _clear_keys(event=None):
     _keyswaiting = {}
     _got_release = None
 
-def keys_pressed(d_o_e=tkinter.EventType,
-                 d_w=tkinter.NORMAL):
-    #d_o_e(d_w)
-    d_o_e()
+#def keys_pressed(d_o_e=tkinter._tkinter.dooneevent(),
+#                 d_w=tkinter._tkinter.DONT_WAIT):
+#    d_o_e(d_w)
+#    #d_o_e()
+#    if _got_release:
+#        d_o_e(d_w)
+#        #d_o_e()
+#    return _keysdown.keys()
+# solution on: https://www.manongdao.com/q-353078.html
+
+def keys_pressed(d_o_e=lambda arg: _root_window.dooneevent(arg),
+        d_w=tkinter._tkinter.DONT_WAIT):
+    #root.tk.dooneevent(tkinter._tkinter.DONT_WAIT)
+    d_o_e(d_w)
     if _got_release:
-        #d_o_e(d_w)
-        d_o_e()
+        #root.tk.dooneevent(tkinter._tkinter.DONT_WAIT)
+        d_o_e(d_w)
     return _keysdown.keys()
 
 def keys_waiting():
@@ -315,12 +325,20 @@ def wait_for_keys():
         sleep(0.05)
     return keys
 
+#def remove_from_screen(x,
+#                       d_o_e=tkinter._tkinter.dooneevent(),
+#                       d_w=tkinter._tkinter.DONT_WAIT):
+#    _canvas.delete(x)
+#    d_o_e(d_w)
+#    #d_o_e()
+
 def remove_from_screen(x,
-                       d_o_e=tkinter.Event,
-                       d_w=tkinter.NORMAL):
+                       d_o_e=lambda arg: _root_window.dooneevent(arg),
+                       d_w=tkinter._tkinter.DONT_WAIT
+                       ):
     _canvas.delete(x)
-    #d_o_e(d_w)
-    d_o_e()
+    #root.tk.dooneevent(tkinter._tkinter.DONT_WAIT)
+    d_o_e(d_w)
 
 def _adjust_coords(coord_list, x, y):
     for i in range(0, len(coord_list), 2):
@@ -328,9 +346,33 @@ def _adjust_coords(coord_list, x, y):
         coord_list[i + 1] = coord_list[i + 1] + y
     return coord_list
 
+#def move_to(object, x, y=None,
+#            d_o_e=tkinter._tkinter.dooneevent(),
+#            d_w=tkinter._tkinter.DONT_WAIT):
+#    if y is None:
+#        try: x, y = x
+#        except: raise ('incomprehensible coordinates')
+#
+#    horiz = True
+#    newCoords = []
+#    current_x, current_y = _canvas.coords(object)[0:2] # first point
+#    for coord in  _canvas.coords(object):
+#        if horiz:
+#            inc = x - current_x
+#        else:
+#            inc = y - current_y
+#        horiz = not horiz
+
+#        newCoords.append(coord + inc)
+
+#    _canvas.coords(object, *newCoords)
+#    d_o_e(d_w)
+#    #d_o_e()
+
 def move_to(object, x, y=None,
-            d_o_e=tkinter.Event,
-            d_w=tkinter.NORMAL):
+            d_o_e=lambda arg: _root_window.dooneevent(arg),
+            d_w=tkinter._tkinter.DONT_WAIT
+            ):
     if y is None:
         try: x, y = x
         except: raise ('incomprehensible coordinates')
@@ -348,12 +390,37 @@ def move_to(object, x, y=None,
         newCoords.append(coord + inc)
 
     _canvas.coords(object, *newCoords)
-    #d_o_e(d_w)
-    d_o_e()
+    #root.tk.dooneevent(tkinter._tkinter.DONT_WAIT)
+    d_o_e(d_w)
+
+#def move_by(object, x, y=None,
+#            d_o_e=tkinter._tkinter.dooneevent,
+#            d_w=tkinter._tkinter.DONT_WAIT, lift=False):
+#    if y is None:
+#        try: x, y = x
+#        except: raise Exception('incomprehensible coordinates')
+
+#    horiz = True
+#    newCoords = []
+#    for coord in  _canvas.coords(object):
+#        if horiz:
+#            inc = x
+#        else:
+#            inc = y
+#        horiz = not horiz
+
+#        newCoords.append(coord + inc)
+
+#    _canvas.coords(object, *newCoords)
+#    d_o_e(d_w)
+#    #d_o_e()
+#    if lift:
+#        _canvas.tag_raise(object)
 
 def move_by(object, x, y=None,
-            d_o_e=tkinter.Event,
-            d_w=tkinter.NORMAL, lift=False):
+            d_o_e=lambda arg: _root_window.dooneevent(arg),
+            d_w=tkinter._tkinter.DONT_WAIT
+            , lift=False):
     if y is None:
         try: x, y = x
         except: raise Exception('incomprehensible coordinates')
@@ -370,10 +437,12 @@ def move_by(object, x, y=None,
         newCoords.append(coord + inc)
 
     _canvas.coords(object, *newCoords)
-    #d_o_e(d_w)
-    d_o_e()
+    #root.tk.dooneevent(tkinter._tkinter.DONT_WAIT)
+    d_o_e(d_w)
+    #d_o_e()
     if lift:
         _canvas.tag_raise(object)
+
 
 def writePostscript(filename):
     "Writes the current canvas to a postscript file."
