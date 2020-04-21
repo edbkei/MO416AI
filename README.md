@@ -1,11 +1,11 @@
 # MO416AI
 
 # Objetive
-1- Comply MO416AI/Prototype4maT with Project objectives (MO416AI/Prototype4maT/project.pdf), using the maximum possible the algorithms given in https://github.com/aimacode/aima-python/blob/master/search.ipynb
+1- Comply MO416AI/Prototype3 with Project objectives (MO416AI/Prototype4maT/project.pdf), using the maximum possible the algorithms given in https://github.com/aimacode/aima-python/blob/master/search.ipynb
 
 2- Install Python3 and Pycharm. Tool requirement shall follow: https://github.com/aimacode/aima-python/blob/master/requirements.txt (install with conda install xxxx, pip install xxx)
 
-3- Adapt output.txt to MO416AI/Prototype4maT/layout/*.lay
+3- Adapt output.txt to MO416AI/Prototype3/layout/*.lay
 
 4- new layout shall be possible with parameter -l in command line python pacman.py
 
@@ -19,7 +19,7 @@
 
 9- 2 minutes videos of project shall be prepared
 
-10- Jupyter notebook shall be prepared (MO416AI/Prototype4maT/pacman.pynb)
+10- Jupyter notebook shall be prepared (MO416AI/Prototype3/pacman.pynb)
 
 11- Test new layout output.txt
 
