@@ -318,7 +318,8 @@ def remove_from_screen(x,
                        d_o_e=tkinter.Event,
                        d_w=tkinter.NORMAL):
     _canvas.delete(x)
-    d_o_e(d_w)
+    #d_o_e(d_w)
+    d_o_e()
 
 def _adjust_coords(coord_list, x, y):
     for i in range(0, len(coord_list), 2):
@@ -349,7 +350,8 @@ def move_to(object, x, y=None,
         newCoords.append(coord + inc)
 
     _canvas.coords(object, *newCoords)
-    d_o_e(d_w)
+    #d_o_e(d_w)
+    d_o_e()
 
 #def move_by(object, x, y=None,
 #            d_o_e=Tkinter.tkinter.dooneevent,
@@ -373,7 +375,8 @@ def move_by(object, x, y=None,
         newCoords.append(coord + inc)
 
     _canvas.coords(object, *newCoords)
-    d_o_e(d_w)
+    #d_o_e(d_w)
+    d_o_e()
     if lift:
         _canvas.tag_raise(object)
 
