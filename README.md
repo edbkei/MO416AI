@@ -1,9 +1,9 @@
 # MO416AI
 
 # Objetive
-1- Comply MO416AI/Prototype4maT with Project objectives (MO416AI/Prototype4maT/project.pdf)
+1- Comply MO416AI/Prototype4maT with Project objectives (MO416AI/Prototype4maT/project.pdf), using the maximum possible the algorithms given in https://github.com/aimacode/aima-python/blob/master/search.ipynb
 
-2- Install Python3 and Pycharm
+2- Install Python3 and Pycharm. Tool requirement shall follow: https://github.com/aimacode/aima-python/blob/master/requirements.txt (install with conda install xxxx, pip install xxx)
 
 3- Adapt output.txt to MO416AI/Prototype4maT/layout/*.lay
 
