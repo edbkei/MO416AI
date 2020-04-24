@@ -159,6 +159,12 @@ class PositionSearchProblem(search.SearchProblem):
         self.goal = goal
         self.costFn = costFn
         self.visualize = visualize
+        print("we are in searchAgents.py ...")
+        print("print layout")
+        print(str(gameState.getWalls())) # MO416 testing
+        print("initial position of pacman is "+str(gameState.getPacmanPosition())) # MO416 testing
+        print("Number of foods is "+str(gameState.getNumFood())) # MO416 testing
+        print("has the game food? "+str(gameState.hasFood(*goal))) # MO416 testing
         if warn and (gameState.getNumFood() != 1 or not gameState.hasFood(*goal)):
             print('Warning: this does not look like a regular search maze')
 

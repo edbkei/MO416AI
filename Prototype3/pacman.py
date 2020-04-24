@@ -106,7 +106,8 @@ class GameState:
             state.data._eaten = [False for i in range(state.getNumAgents())]
             PacmanRules.applyAction( state, action )
         else:                # A ghost is moving
-            GhostRules.applyAction( state, action, agentIndex )
+            doNothing=0 # MO416 dummy code
+            #GhostRules.applyAction( state, action, agentIndex ) # MO416 testing Stop Ghost Movement.
 
         # Time passes
         if agentIndex == 0:
@@ -395,6 +396,7 @@ class GhostRules:
             possibleActions.remove( Directions.STOP )
         if reverse in possibleActions and len( possibleActions ) > 1:
             possibleActions.remove( reverse )
+        #possibleActions = Actions.# checking
         return possibleActions
     getLegalActions = staticmethod( getLegalActions )
 
@@ -406,6 +408,7 @@ class GhostRules:
 
         ghostState = state.data.agentStates[ghostIndex]
         speed = GhostRules.GHOST_SPEED
+        #speed = GhostRules.
         if ghostState.scaredTimer > 0: speed /= 2.0
         vector = Actions.directionToVector( action, speed )
         ghostState.configuration = ghostState.configuration.generateSuccessor( vector )
@@ -452,6 +455,7 @@ class GhostRules:
 
     def placeGhost(state, ghostState):
         ghostState.configuration = ghostState.start
+        #ghostState.placeGhost.
     placeGhost = staticmethod( placeGhost )
 
 #############################
@@ -610,7 +614,10 @@ def loadAgent(pacman, nographics):
 def replayGame( layout, actions, display ):
     import pacmanAgents, ghostAgents
     rules = ClassicGameRules()
-    agents = [pacmanAgents.GreedyAgent()] + [ghostAgents.RandomGhost(i+1) for i in range(layout.getNumGhosts())]
+
+    #ghostAgents.
+    agents = [pacmanAgents.GreedyAgent()] + [ghostAgents.staticGhost(i+1) for i in range(layout.getNumGhosts())]
+    #agents = [pacmanAgents.GreedyAgent()] + [ghostAgents.RandomGhost(i+1) for i in range(layout.getNumGhosts())]
     game = rules.newGame( layout, agents[0], agents[1:], display )
     state = game.state
     display.initialize(state.data)
