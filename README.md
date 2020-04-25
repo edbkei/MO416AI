@@ -53,7 +53,7 @@ python pacman.py -l layoutMO416b -p SearchAgent -a fn=dfs -z .6
 
 python pacman.py -l layoutMO416b -p SearchAgent -a fn=bfs -z .6
 
-Note: the search path used is highlighted during pacman moviment.
+Note: the search path used is highlighted during pacman movement.
 
 
       
