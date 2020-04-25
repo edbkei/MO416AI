@@ -27,6 +27,12 @@
 
 13- Single search agent using Prototype3: python pacman.py -l layoutMO416b -p SearchAgent -a fn=dfs shall be possible. OK.
 
+14- Find in the code the heuristics used.
+
+15- Check if missing any requirement. Example, the algorithm used in prototype3 matches https://github.com/aimacode/aima-python/blob/master/search.ipynb?
+
+16- Is it possible to detect ghost using bfs?
+
 Version information:
 
 v0.0 - Updated 2020/04/21. Updated graphicsUtil.py, autograder.py, grading.py, searchTestClasses.py
