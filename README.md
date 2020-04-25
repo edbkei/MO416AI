@@ -19,7 +19,7 @@
 
 9- 2 minutes videos of project shall be prepared
 
-10- Jupyter notebook shall be prepared (MO416AI/Prototype3/pacman.ipynb)
+10- Jupyter notebook shall be prepared (MO416AI/Prototype3/pacman.ipynb). ONGOING. mo416pacman.ipynb started.
 
 11- Test new layout output.txt. OK. output.txt is not appropriated, new layout layoutMO416b.lay is the valid one.
 
@@ -27,11 +27,11 @@
 
 13- Single search agent using Prototype3: python pacman.py -l layoutMO416b -p SearchAgent -a fn=dfs shall be possible. OK.
 
-14- Find in the code the heuristics used.
+14- Find in the code the heuristics used. ONGOING. A* heuristic is possible, one more is needed.
 
-15- Check if missing any requirement. Example, the algorithm used in prototype3 matches https://github.com/aimacode/aima-python/blob/master/search.ipynb?
+15- Check if missing any requirement. Example, the algorithm used in prototype3 matches https://github.com/aimacode/aima-python/blob/master/search.ipynb? ONGOING.
 
-16- Is it possible to detect ghost using bfs?
+16- Is it possible to detect ghost using bfs? OK. Yes.
 
 Version information:
 
@@ -54,6 +54,8 @@ python pacman.py -l layoutMO416b -p SearchAgent -a fn=dfs -z .6
 python pacman.py -l layoutMO416b -p SearchAgent -a fn=bfs -z .6
 
 Note: the search path used is highlighted during pacman movement.
+
+v0.4 - Updated 20220/04/25. Updated due to requirement itemizations. new mo416pacman.ipynb, pacman.py, searchAgents.py, search.py.
 
 
       
