@@ -107,7 +107,7 @@ class GameState:
             PacmanRules.applyAction( state, action )
         else:                # A ghost is moving
             doNothing=0 # MO416 dummy code
-            #GhostRules.applyAction( state, action, agentIndex ) # MO416 testing Stop Ghost Movement.
+            #GhostRules.applyAction( state, action, agentIndex ) # MO416 testing Stop Ghost Movement. Req [R12]
 
         # Time passes
         if agentIndex == 0:
@@ -294,7 +294,7 @@ class ClassicGameRules:
         game.gameOver = True
 
     def lose( self, state, game ):
-        if not self.quiet: print("Pacman died! Score: %d" + str(state.data.score))
+        if not self.quiet: print("Pacman died! Score: " + str(state.data.score))
         game.gameOver = True
 
     def getProgress(self, game):
