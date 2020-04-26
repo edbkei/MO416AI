@@ -57,9 +57,9 @@ Note: the search path used is highlighted during pacman movement.
 
 v0.4 - Updated 2020/04/25. Updated due to requirement itemizations. new mo416pacman.ipynb, pacman.py, searchAgents.py, search.py.
 
-v0.5 - Updated 2020/04/26. New scripts search2.py and search2Agents.py. Parameter -p SearchAgent2 can now be specified.
+v0.5 - Updated 2020/04/26. New scripts search2.py and search2Agents.py. Parameter -p Search2Agent can now be specified.
 
-       python pacman.py -l mediumSearch -p SearchAgent2 -a fn=dfs -z .6
+       python pacman.py -l mediumSearch -p Search2Agent -a fn=dfs -z .6
 
 
       
