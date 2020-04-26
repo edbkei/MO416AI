@@ -56,7 +56,7 @@ class GoWestAgent2(Agent):
 #       after you fill in parts of search.py          #
 #######################################################
 
-class SearchAgent2(Agent):
+class Search2Agent(Agent):
     """
     This very general search agent finds a path using a supplied search
     algorithm for a supplied search problem, then returns actions to follow that
@@ -102,7 +102,7 @@ class SearchAgent2(Agent):
         if prob not in globals().keys() or not prob.endswith('Problem2'):
             raise AttributeError(prob + ' is not a search problem type in Search2Agents.py.')
         self.searchType = globals()[prob]
-        print('[SearchAgent2] using problem type ' + prob)
+        print('[Search2Agent] using problem type ' + prob)
 
     def registerInitialState(self, state):
         """
@@ -237,7 +237,7 @@ class PositionSearchProblem2(search2.SearchProblem2):
             cost += self.costFn((x,y))
         return cost
 
-class StayEastSearchAgent2(SearchAgent2):
+class StayEastSearchAgent2(Search2Agent):
     """
     An agent for position search with a cost function that penalizes being in
     positions on the West side of the board.
@@ -249,7 +249,7 @@ class StayEastSearchAgent2(SearchAgent2):
         costFn = lambda pos: .5 ** pos[0]
         self.searchType = lambda state: PositionSearchProblem2(state, costFn, (1, 1), None, False)
 
-class StayWestSearchAgent2(SearchAgent2):
+class StayWestSearchAgent2(Search2Agent):
     """
     An agent for position search with a cost function that penalizes being in
     positions on the East side of the board.
@@ -373,7 +373,7 @@ def cornersHeuristic(state, problem):
     "*** YOUR CODE HERE ***"
     return 0 # Default to trivial solution
 
-class AStarCornersAgent2(SearchAgent2):
+class AStarCornersAgent2(Search2Agent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
     def __init__(self):
         self.searchFunction = lambda prob: search2.aStarSearch(prob, cornersHeuristic)
@@ -429,7 +429,7 @@ class FoodSearchProblem:
             cost += 1
         return cost
 
-class AStarFoodSearchAgent2(SearchAgent2):
+class AStarFoodSearchAgent2(Search2Agent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
     def __init__(self):
         self.searchFunction = lambda prob: search2.aStarSearch(prob, foodHeuristic)
@@ -467,7 +467,7 @@ def foodHeuristic(state, problem):
     "*** YOUR CODE HERE ***"
     return 0
 
-class ClosestDotSearchAgent2(SearchAgent2):
+class ClosestDotSearchAgent2(Search2Agent):
     "Search for all food using a sequence of searches"
     def registerInitialState(self, state):
         self.actions = []
