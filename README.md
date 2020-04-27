@@ -61,7 +61,17 @@ v0.5 - Updated 2020/04/26. New scripts search2.py and search2Agents.py. Paramete
 
        python pacman.py -l mediumSearch -p Search2Agent -a fn=dfs -z .6
 
+v0.6 - Update 2020/04/26. Updated search2.py and search2Agents.py with -a fn=gbfs (Greedy Best First Search).
 
+       python pacman.py -l mediumSearch -p Search2Agent -a fn=gbfs -z .6
       
+       introduced euclideanHeuristic in search2.py.  This heuristic is still not good with gbfs.
+       
+       The algorithm introduced in search2.py is based on A*. The stop condition in A* is f(x) = g(x) + h(x), and in gbfs is f(x) = g(x)
+       
+       https://www.mygreatlearning.com/blog/best-first-search-bfs/
+       
+       gbfs with h(x) is still not good.
+       
 
 
