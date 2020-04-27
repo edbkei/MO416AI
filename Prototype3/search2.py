@@ -429,6 +429,64 @@ def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
 
     return actions
 
+def hillClimbingSearch(problem, heuristic=nullHeuristic):
+    priority_queue = util.PriorityQueue()
+    trace = {}
+    seen = []
+
+    start_state = problem.getStartState()
+    prev_cost = 0
+    trace[start_state] = [None, None, prev_cost]
+
+    priority_queue.update(start_state, 0)
+    seen.append(start_state)
+
+    while not priority_queue.isEmpty():
+
+        # arrive at state
+        curr_state = priority_queue.pop()
+
+        # check if state is goal
+        if problem.isGoalState(curr_state):
+            break
+
+        # get possible next states
+        successors = problem.getSuccessors(curr_state)
+        #print(successors) # MO416
+
+        for successor in successors:
+
+            next_state = successor[0]
+            next_action = successor[1]
+            next_cost = successor[2]
+
+            # avoid traveling back to previous states
+            if next_state not in seen:
+                prev_cost = trace[curr_state][2]
+                seen.append(next_state)
+                priority_queue.update(next_state, next_cost + prev_cost)
+
+            # update and allow tracing to the best state
+            if next_state in trace:
+                if trace[next_state][2] > next_cost + prev_cost:
+                    trace[next_state][2] = next_cost + prev_cost
+                    trace[next_state][1] = next_action
+                    trace[next_state][0] = curr_state
+            else:
+                trace[next_state] = [curr_state, next_action, next_cost + prev_cost]
+
+    # back track
+    actions = []
+    backtrack_state = curr_state  # the goal state
+    while backtrack_state != start_state:
+        prev_state, action, _ = trace[backtrack_state]
+        actions.append(action)
+        backtrack_state = prev_state
+    actions = list(reversed(actions))
+
+    return actions
+
+
 def euclideanHeuristic(position, problem, info={}):
     "The Euclidean distance heuristic for a PositionSearchProblem"
     xy1 = position
@@ -442,8 +500,9 @@ def manhattanHeuristic(position, problem, info={}):
     return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
 
 # Abbreviations
+astar = aStarSearch
 bfs = breadthFirstSearch
 dfs = depthFirstSearch
-astar = aStarSearch
-ucs = uniformCostSearch
 gbfs = greedyBestFirstSearch
+hcs = hillClimbingSearch
+ucs = uniformCostSearch

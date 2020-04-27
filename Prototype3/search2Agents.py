@@ -93,7 +93,10 @@ class Search2Agent(Agent):
                 heur = getattr(search2, heuristic)
             else:
                 raise AttributeError( heuristic + ' is not a function in searchAgents.py or search.py.')
-            print('[Search2Agent] using function %s and [R18] heuristic %s' % (fn, "Manhattan"))
+            if (fn!='hcs'):
+                print('[Search2Agent] using function %s and [R18] heuristic %s' % (fn, "Manhattan"))
+            else:
+                print('[Search2Agent] using function %s ' % (fn))
             # Note: this bit of Python trickery combines the search algorithm and the heuristic
             self.searchFunction = lambda x: func(x, heuristic=heur)
             #print('heuristic: '+str(heur))
@@ -246,7 +249,7 @@ class StayEastSearchAgent2(Search2Agent):
     The cost function for stepping into a position (x,y) is 1/2^x.
     """
     def __init__(self):
-        self.searchFunction = search.uniformCostSearch
+        self.searchFunction = search2.uniformCostSearch
         costFn = lambda pos: .5 ** pos[0]
         self.searchType = lambda state: PositionSearchProblem2(state, costFn, (1, 1), None, False)
 
@@ -331,10 +334,12 @@ class CornersProblem2(search2.SearchProblem2):
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall:
-            #   x,y = currentPosition
-            #   dx, dy = Actions.directionToVector(action)
-            #   nextx, nexty = int(x + dx), int(y + dy)
-            #   hitsWall = self.walls[nextx][nexty]
+            # MO416
+            x,y = state #currentPosition
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            hitsWall = self.walls[nextx][nexty]
+            print("x="+str(state)+",dx="+str(dx)+",nextx="+str(nextx)+",hitsWall="+str(hitsWall))
 
             "*** YOUR CODE HERE ***"
 
