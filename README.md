@@ -73,5 +73,5 @@ v0.6 - Update 2020/04/26. Updated search2.py and search2Agents.py with -a fn=gbf
        
        gbfs with h(x) is still not good.
        
-
+v0.7 - Updated 20/04/27. Updated search2.py, search2Agents.py, mo416pacman.ipynb to fix gbfs and A* with heuristic Manhattan.
 
