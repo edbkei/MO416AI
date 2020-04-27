@@ -171,6 +171,7 @@ class PositionSearchProblem2(search2.SearchProblem2):
         #print(str(gameState.getWalls())) # MO416 testing
         print("[R13] Initial position of pacman is "+str(gameState.getPacmanPosition())) # MO416 testing
         print("[R11] Final goal position is "+str(goal))
+        print("[R22] Ghost Positions is/are "+str(gameState.getGhostPositions()))
         print("Number of foods is "+str(gameState.getNumFood())) # MO416 testing
         print("[R16] has the game food? "+str(gameState.hasFood(*goal))) # MO416 testing
         if warn and (gameState.getNumFood() != 1 or not gameState.hasFood(*goal)):
