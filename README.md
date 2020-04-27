@@ -75,3 +75,8 @@ v0.6 - Update 2020/04/26. Updated search2.py and search2Agents.py with -a fn=gbf
        
 v0.7 - Updated 20/04/27. Updated search2.py, search2Agents.py, mo416pacman.ipynb to fix gbfs and A* with heuristic Manhattan.
 
+v0.8 - Update 2020/04/27. Updated search2.py and search2Agents.py with -a fn=hcs (Hill Climbing Search).
+
+       python pacman.py -l mediumSearch -p Search2Agent -a fn=hcs -z .6
+      
+      In this version, hcs is similar to ucs, as it is considered uniform cost.
