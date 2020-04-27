@@ -115,7 +115,7 @@ def depthFirstSearch(problem):
         valid_successors = 0
         successors = problem.getSuccessors(curr_state)
         #print("we are in search.py ...")
-        print(successors) # MO416 testing
+        #print(successors) # MO416 testing
 
         for successor in successors:
 
@@ -254,7 +254,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 
     g = {}
     g[start_state] = 0
-    def f(curr_node): return float(g[curr_node] + heuristic(curr_node, problem))
+    def f(curr_node): return float(g[curr_node] + manhattanHeuristic(curr_node, problem))
 
 
     open_list = util.PriorityQueue()
@@ -276,7 +276,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 
         # get possible next states
         successors = problem.getSuccessors(curr_state)
-        print(successors) # MO416 testinig
+        #print(successors) # MO416 testinig
         
         for successor in successors:
 
@@ -341,7 +341,8 @@ def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
     g[start_state] = 0
     #h = euclideanHeuristic(problem.getStartState, problem)
     def f(curr_node):
-        return float(g[curr_node] + heuristic(curr_node, problem))
+        return float(manhattanHeuristic(curr_node, problem))
+        #return float(g[curr_node] + manhattanHeuristic(curr_node, problem))
     #def f(curr_node):
         #print("g="+str(g[curr_node])+",h="+str(euclideanHeuristic(curr_node, problem)))
         #return float(euclideanHeuristic(curr_node, problem))
@@ -359,8 +360,8 @@ def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
         # arrive at state
         curr_state = open_list.pop()
         #h=euclideanHeuristic(curr_node, problem)
-        print('curr_state='+str(curr_state))
-        print(open_seen)
+        #print('curr_state='+str(curr_state))
+        #print(open_seen)
         open_seen.remove(curr_state)
 
         # check if state is goal
@@ -369,7 +370,7 @@ def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
 
         # get possible next states
         successors = problem.getSuccessors(curr_state)
-        print(successors)  # MO416 testinig
+        #print(successors)  # MO416 testinig
 
         for successor in successors:
 
@@ -379,11 +380,11 @@ def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
             successor_cost = g[curr_state] + next_cost
 
             UPDATE = False
-            print("successor_cost="+str(successor_cost))
+            #print("successor_cost="+str(successor_cost))
             if next_state in open_seen:
                 h=euclideanHeuristic(next_state, problem)
-                print("h="+str(h))
-                if(h==0):pass
+                #print("h="+str(h))
+                #if(h==0):pass
                 if g[next_state] <= successor_cost:
                     pass
                 else:
@@ -433,6 +434,12 @@ def euclideanHeuristic(position, problem, info={}):
     xy1 = position
     xy2 = problem.goal
     return int(( (xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2 ) ** 0.5)
+
+def manhattanHeuristic(position, problem, info={}):
+    "The Manhattan distance heuristic for a PositionSearchProblem"
+    xy1 = position
+    xy2 = problem.goal
+    return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
 
 # Abbreviations
 bfs = breadthFirstSearch

@@ -84,7 +84,7 @@ class Search2Agent(Agent):
         #if 'heuristic' not in func.func_code.co_varnames:
         #print('func.__code__.co_varnames: '+str(func.__code__.co_varnames)) # MO416
         if 'heuristic' not in func.__code__.co_varnames:
-            print('[SearchAgent2] using function ' + fn + ' without heuristic in search2Agents.py')
+            print('[SearchAgent2] using function ' + fn)
             self.searchFunction = func
         else:
             if heuristic in globals().keys():
@@ -93,7 +93,7 @@ class Search2Agent(Agent):
                 heur = getattr(search2, heuristic)
             else:
                 raise AttributeError( heuristic + ' is not a function in searchAgents.py or search.py.')
-            print('[Search2Agent] using function %s and heuristic %s' % (fn, heuristic))
+            print('[Search2Agent] using function %s and [R18] heuristic %s' % (fn, "Manhattan"))
             # Note: this bit of Python trickery combines the search algorithm and the heuristic
             self.searchFunction = lambda x: func(x, heuristic=heur)
             #print('heuristic: '+str(heur))
@@ -166,10 +166,10 @@ class PositionSearchProblem2(search2.SearchProblem2):
         #print("we are in searchAgents.py ...")
         #print("print layout")
         #print(str(gameState.getWalls())) # MO416 testing
-        print("[R13]b Initial position of pacman is "+str(gameState.getPacmanPosition())) # MO416 testing
-        print("[R11]b Final goal position is "+str(goal))
+        print("[R13] Initial position of pacman is "+str(gameState.getPacmanPosition())) # MO416 testing
+        print("[R11] Final goal position is "+str(goal))
         print("Number of foods is "+str(gameState.getNumFood())) # MO416 testing
-        print("[R16]b has the game food? "+str(gameState.hasFood(*goal))) # MO416 testing
+        print("[R16] has the game food? "+str(gameState.hasFood(*goal))) # MO416 testing
         if warn and (gameState.getNumFood() != 1 or not gameState.hasFood(*goal)):
             print('Warning: this does not look like a regular search maze')
 
