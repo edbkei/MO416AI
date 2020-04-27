@@ -73,17 +73,18 @@ class Search2Agent(Agent):
     Note: You should NOT change any code in SearchAgent
     """
 
-    def __init__(self, fn='depthFirstSearch', prob='PositionSearchProblem2', heuristic='nullHeuristic'):
+    def __init__(self, fn='greedySearch', prob='PositionSearchProblem2', heuristic='nullHeuristic'):
         # Warning: some advanced Python magic is employed below to find the right functions and problems
 
         # Get the search function from the name and heuristic
+        #print(dir(search2)) # MO416
         if fn not in dir(search2):
-            raise AttributeError(fn + ' is not a search function in search.py.')
+            raise AttributeError(fn + ' is not a search function in search2.py.')
         func = getattr(search2, fn)
         #if 'heuristic' not in func.func_code.co_varnames:
-        #print('func.__code__.co_varnames: '+str(func.__code__.co_varnames))
+        #print('func.__code__.co_varnames: '+str(func.__code__.co_varnames)) # MO416
         if 'heuristic' not in func.__code__.co_varnames:
-            print('[SearchAgent] using function ' + fn + ' without heuristic in searchAgents.py')
+            print('[SearchAgent2] using function ' + fn + ' without heuristic in search2Agents.py')
             self.searchFunction = func
         else:
             if heuristic in globals().keys():
@@ -92,7 +93,7 @@ class Search2Agent(Agent):
                 heur = getattr(search2, heuristic)
             else:
                 raise AttributeError( heuristic + ' is not a function in searchAgents.py or search.py.')
-            print('[SearchAgent] using function %s and heuristic %s' % (fn, heuristic))
+            print('[Search2Agent] using function %s and heuristic %s' % (fn, heuristic))
             # Note: this bit of Python trickery combines the search algorithm and the heuristic
             self.searchFunction = lambda x: func(x, heuristic=heur)
             #print('heuristic: '+str(heur))
