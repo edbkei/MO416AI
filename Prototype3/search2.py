@@ -445,6 +445,7 @@ def hillClimbingSearch(problem, heuristic=nullHeuristic):
     priority_queue.update(start_state, 0)
     seen.append(start_state)
     prevsuccessors2 = []
+    prevsuccessors22 = []
     while not priority_queue.isEmpty():
 
         # arrive at state
@@ -471,7 +472,7 @@ def hillClimbingSearch(problem, heuristic=nullHeuristic):
             while True:
                 i=i+1
                 idx = random.randint(0, t - 1)
-                print(prevsuccessors2)
+                #print(prevsuccessors2)
                 if(prevsuccessors2==[]):
                     successors2.append(successors[idx])
                     prevsuccessors2=successors2
@@ -494,8 +495,8 @@ def hillClimbingSearch(problem, heuristic=nullHeuristic):
                     prevsuccessors2 = successors2
                     break
                 #successors2.append(successors[idx])
-        print(str(successors)+" is "+str(successors2))
-        print(prevsuccessors2)
+        #print(str(successors)+" is "+str(successors2))
+        #print(prevsuccessors2)
         #print(successors)
         #print(successors2)
 
@@ -506,14 +507,32 @@ def hillClimbingSearch(problem, heuristic=nullHeuristic):
             next_action = successor[1]
             next_cost = successor[2]
 
-            # avoid traveling back to previous states
-            if next_state not in seen:
+            if (prevsuccessors22 == []):
+                #prevsuccessors22.append(successor)
+                prevsuccessors22 = successor
                 prev_cost = trace[curr_state][2]
                 seen.append(next_state)
                 #priority_queue.update(next_state, next_cost + prev_cost)
                 priority_queue.update(next_state, 1)
+            elif (not ((next_action == 'East' and prevsuccessors22[0][1] == 'West') \
+                     or (next_action == 'West' and prevsuccessors22[0][1] == 'East') \
+                     or (next_action == 'South' and prevsuccessors22[0][1] == 'North') \
+                     or (next_action == 'North' and prevsuccessors22[0][1] == 'South'))):
+                        #prevsuccessors22.append(successor)
+                        prevsuccessors22 = successor
+                        prev_cost = trace[curr_state][2]
+                        seen.append(next_state)
+                        priority_queue.update(next_state, 1)
             else:
                 seen.remove(next_state)
+
+            #if next_state not in seen:
+            #    prev_cost = trace[curr_state][2]
+             #   seen.append(next_state)
+                #priority_queue.update(next_state, next_cost + prev_cost)
+             #   priority_queue.update(next_state, 1)
+            #else:
+                #seen.remove(next_state)
 
 
             # update and allow tracing to the best state
