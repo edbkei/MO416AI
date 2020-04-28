@@ -18,6 +18,7 @@ Pacman agents (in searchAgents.py).
 """
 
 import util
+import random
 
 class SearchProblem2:
     """
@@ -431,16 +432,19 @@ def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
 
 def hillClimbingSearch(problem, heuristic=nullHeuristic):
     priority_queue = util.PriorityQueue()
+    #print(priority_queue.count)
     trace = {}
     seen = []
+    goal=(1,3)
 
     start_state = problem.getStartState()
+    #print(start_state)
     prev_cost = 0
     trace[start_state] = [None, None, prev_cost]
 
     priority_queue.update(start_state, 0)
     seen.append(start_state)
-
+    prevsuccessors2 = []
     while not priority_queue.isEmpty():
 
         # arrive at state
@@ -452,9 +456,51 @@ def hillClimbingSearch(problem, heuristic=nullHeuristic):
 
         # get possible next states
         successors = problem.getSuccessors(curr_state)
+        #print(curr_state)
+        #t=len(successors) # MO416
+        #print(random.randint(0,t-1))
         #print(successors) # MO416
+        #print(successors[0])
+        t=len(successors) # MO416
+        successors2 = []
+        if(t==1):
+            idx=0
+            successors2=successors
+        else:
+            i=0
+            while True:
+                i=i+1
+                idx = random.randint(0, t - 1)
+                print(prevsuccessors2)
+                if(prevsuccessors2==[]):
+                    successors2.append(successors[idx])
+                    prevsuccessors2=successors2
+                    break
+                if (successors[idx][0] != prevsuccessors2[0]):
+                    #print(successors)
+                    #print(successors[idx][1])
+                    #print(prevsuccessors2)
+                    #print(prevsuccessors2[0][0])
+                    if(not((successors[idx][1]=='East' and prevsuccessors2[0][1]=='West') \
+                            or (successors[idx][1]=='West' and prevsuccessors2[0][1]=='East') \
+                            or (successors[idx][1]=='South' and prevsuccessors2[0][1]=='North') \
+                            or (successors[idx][1] == 'North' and prevsuccessors2[0][1] == 'South'))):
+                                successors2.append(successors[idx])
+                                prevsuccessors2=successors2
+                                break
+                if (i>5):
+                    idx = random.randint(0, t - 1)
+                    successors2.append(successors[idx])
+                    prevsuccessors2 = successors2
+                    break
+                #successors2.append(successors[idx])
+        print(str(successors)+" is "+str(successors2))
+        print(prevsuccessors2)
+        #print(successors)
+        #print(successors2)
 
-        for successor in successors:
+
+        for successor in successors2:
 
             next_state = successor[0]
             next_action = successor[1]
@@ -464,18 +510,31 @@ def hillClimbingSearch(problem, heuristic=nullHeuristic):
             if next_state not in seen:
                 prev_cost = trace[curr_state][2]
                 seen.append(next_state)
-                priority_queue.update(next_state, next_cost + prev_cost)
+                #priority_queue.update(next_state, next_cost + prev_cost)
+                priority_queue.update(next_state, 1)
+            else:
+                seen.remove(next_state)
+
 
             # update and allow tracing to the best state
-            if next_state in trace:
-                if trace[next_state][2] > next_cost + prev_cost:
-                    trace[next_state][2] = next_cost + prev_cost
-                    trace[next_state][1] = next_action
-                    trace[next_state][0] = curr_state
-            else:
-                trace[next_state] = [curr_state, next_action, next_cost + prev_cost]
+            #if next_state in trace:
+                #if trace[next_state][2] > next_cost + prev_cost:
+                    #trace[next_state][2] = next_cost + prev_cost
+                #    trace[next_state][2] = next_cost + prev_cost
+                #    trace[next_state][1] = next_action
+                #    trace[next_state][0] = curr_state
+            #else:
+            #
+
+            #print("seen is "+str(seen))
+            if not next_state in trace:
+                #trace[next_state] = [curr_state, next_action, next_cost + prev_cost]
+                trace[next_state] = [curr_state, next_action, 1]
+            #print("trace is "+str(trace))
+            if(curr_state==goal):break
 
     # back track
+    #print(trace)
     actions = []
     backtrack_state = curr_state  # the goal state
     while backtrack_state != start_state:
