@@ -82,3 +82,7 @@ v0.8 - Update 2020/04/27. Updated search2.py and search2Agents.py with -a fn=hcs
       In this version, hcs is similar to ucs, as it is considered uniform cost.
       
 v0.9 - Update 2020/04/27. Updated search2Agents, searchAgents, mo416pacman.ipynb with requirement [22] Ghost positions.    
+
+v0.10 - Updated 2020/04/28. Updated search2.py to comply with Hill Climbing Search, random method introduced when similar cost is encountered between more than 1 neighbours.
+
+
