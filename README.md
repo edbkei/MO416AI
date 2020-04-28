@@ -85,4 +85,6 @@ v0.9 - Update 2020/04/27. Updated search2Agents, searchAgents, mo416pacman.ipynb
 
 v0.10 - Updated 2020/04/28. Updated search2.py to comply with Hill Climbing Search, random method introduced when similar cost is encountered between more than 1 neighbours.
 
+v0.11 - Updated 20/04/28. Updated search2.py to fix bugs of Hill Climbinig Search.
+
 
