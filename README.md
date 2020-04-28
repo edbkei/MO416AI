@@ -87,4 +87,6 @@ v0.10 - Updated 2020/04/28. Updated search2.py to comply with Hill Climbing Sear
 
 v0.11 - Updated 20/04/28. Updated search2.py to fix bugs of Hill Climbinig Search.
 
+v0.12 - Updated 20/04/28. Updated mo416pacman.ipynb. Editorial changes.
+
 
