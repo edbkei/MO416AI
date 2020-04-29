@@ -161,6 +161,7 @@ class PositionSearchProblem2(search2.SearchProblem2):
         goal: A position in the gameState
         """
         self.walls = gameState.getWalls()
+        #gameState.
         self.startState = gameState.getPacmanPosition()
         if start != None: self.startState = start
         self.goal = goal
