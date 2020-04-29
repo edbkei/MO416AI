@@ -89,6 +89,6 @@ v0.11 - Updated 20/04/28. Updated search2.py to fix bugs of Hill Climbinig Searc
 
 v0.12 - Updated 20/04/28. Updated mo416pacman.ipynb. Editorial changes.
 
-v0.13 - Updated 2020/04/29. Updated mo416pacman.ipynb, search2.py. 
+v0.13 - Updated 2020/04/29. Updated mo416pacman.ipynb (now it possible to specify -p search2Agents only, and not need any longer specify searchAgents), search2.py ("if goal" removed from hill climbing), layoutMO416b (changed one Ghost position to evaluate performance of dfs and A*).
 
 
