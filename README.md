@@ -17,19 +17,19 @@
 
 8- Check tkint in game.py, moviment shall be very understood in python3. OK. Done
 
-9- 2 minutes videos of project shall be prepared
+9- 2 minutes videos of project shall be prepared. ONGOING
 
 10- Jupyter notebook shall be prepared (MO416AI/Prototype3/pacman.ipynb). ONGOING. mo416pacman.ipynb started.
 
-11- Test new layout output.txt. OK. output.txt is not appropriated, new layout layoutMO416b.lay is the valid one.
+11- Test new layout output.txt. OK. New layout layoutMO416b.lay is the valid one.
 
-12- Test shall be possible with: python pacman.py -l bigMaze -p SearchAgent -a fn=dfs in Pycharm. OK. 
+12- Test shall be possible with: python pacman.py -l bigMaze -p Search2Agent -a fn=dfs in Pycharm. OK. 
 
 13- Single search agent using Prototype3: python pacman.py -l layoutMO416b -p SearchAgent -a fn=dfs shall be possible. OK.
 
-14- Find in the code the heuristics used. ONGOING. A* heuristic is possible, one more is needed.
+14- Find in the code the heuristics used. OK. Manhattan heuristic is used, implemented in search2.py
 
-15- Check if missing any requirement. Example, the algorithm used in prototype3 matches https://github.com/aimacode/aima-python/blob/master/search.ipynb? ONGOING.
+15- Check if missing any requirement. Example, the algorithm used in prototype3 matches https://github.com/aimacode/aima-python/blob/master/search.ipynb? OK. All requirement items are described in mo416pacman.ipynb.
 
 16- Is it possible to detect ghost using bfs? OK. Yes.
 
@@ -88,5 +88,7 @@ v0.10 - Updated 2020/04/28. Updated search2.py to comply with Hill Climbing Sear
 v0.11 - Updated 20/04/28. Updated search2.py to fix bugs of Hill Climbinig Search.
 
 v0.12 - Updated 20/04/28. Updated mo416pacman.ipynb. Editorial changes.
+
+v0.13 - Updated 2020/04/29. Updated mo416pacman.ipynb, search2.py. 
 
 
