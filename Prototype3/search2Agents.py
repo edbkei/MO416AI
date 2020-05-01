@@ -172,11 +172,11 @@ class PositionSearchProblem2(search2.SearchProblem2):
             for j in range(1,29):
                 if (gameState.hasFood(i,j)):
                     print("i="+str(i)+",j="+str(j))
-                    goal=(i,j)
+                    self.goal=(i,j)
 
-        print(goal)
+        #print(goal)
         #print(type(x))
-        print("gameState.getFood= "+str(gameState.hasFood(1,27)))
+        #print("gameState.getFood= "+str(gameState.hasFood(1,27)))
         self.costFn = costFn
         self.visualize = visualize
         #print("we are in searchAgents.py ...")
