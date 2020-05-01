@@ -133,6 +133,9 @@ def depthFirstSearch(problem):
             while step_counter != stack.list[-1][1]: # back until next awaiting state
                 step_counter -= 1
                 trace.pop()
+
+        # back track
+        problem, _ = backTrackUninformed(problem, start_state, curr_state, trace)
     
 
 def breadthFirstSearch(problem):
@@ -170,13 +173,7 @@ def breadthFirstSearch(problem):
                 trace[next_state] = (curr_state, next_action)
 
     # back track
-    actions = []
-    backtrack_state = curr_state # the goal state
-    while backtrack_state != start_state:
-        prev_state, action = trace[backtrack_state]
-        actions.append(action)
-        backtrack_state = prev_state
-    actions = list(reversed(actions))
+    problem, actions = backTrackUninformed(problem, start_state, curr_state, trace)
 
     return actions
 
@@ -230,13 +227,7 @@ def uniformCostSearch(problem):
                 trace[next_state] = [curr_state, next_action, next_cost + prev_cost]
 
     # back track
-    actions = []
-    backtrack_state = curr_state # the goal state
-    while backtrack_state != start_state:
-        prev_state, action, _ = trace[backtrack_state]
-        actions.append(action)
-        backtrack_state = prev_state
-    actions = list(reversed(actions))
+    problem, actions = backTrackInformed(problem, start_state, curr_state, trace)
 
     return actions
 
@@ -322,16 +313,41 @@ def aStarSearch(problem, heuristic=nullHeuristic):
         close_list.append(curr_state)
 
     # back track
+    problem, actions = backTrackInformed(problem, start_state, curr_state, trace)
+
+    return actions
+
+def backTrackInformed(problem, start_state, curr_state, trace):
     actions = []
+    states = []
     backtrack_state = curr_state # the goal state
+    states.append(curr_state)
     while backtrack_state != start_state:
         prev_state, action, _ = trace[backtrack_state]
         actions.append(action)
         backtrack_state = prev_state
+        states.append(prev_state)
     actions = list(reversed(actions))
+    problem._actions = actions
+    problem._path = list(reversed(states))
 
-    return actions
+    return problem, actions
 
+def backTrackUninformed(problem, start_state, curr_state, trace):
+    actions = []
+    states = []
+    backtrack_state = curr_state # the goal state
+    states.append(curr_state)
+    while backtrack_state != start_state:
+        prev_state, action = trace[backtrack_state]
+        actions.append(action)
+        backtrack_state = prev_state
+        states.append(prev_state)
+    actions = list(reversed(actions))
+    problem._actions = actions
+    problem._path = list(reversed(states))
+
+    return problem, actions
 
 def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
@@ -420,13 +436,7 @@ def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
         close_list.append(curr_state)
 
     # back track
-    actions = []
-    backtrack_state = curr_state  # the goal state
-    while backtrack_state != start_state:
-        prev_state, action, _ = trace[backtrack_state]
-        actions.append(action)
-        backtrack_state = prev_state
-    actions = list(reversed(actions))
+    problem, actions = backTrackInformed(problem, start_state, curr_state, trace)
 
     return actions
 
@@ -554,16 +564,9 @@ def hillClimbingSearch(problem, heuristic=nullHeuristic):
 
     # back track
     #print(trace)
-    actions = []
-    backtrack_state = curr_state  # the goal state
-    while backtrack_state != start_state:
-        prev_state, action, _ = trace[backtrack_state]
-        actions.append(action)
-        backtrack_state = prev_state
-    actions = list(reversed(actions))
+    problem, actions = backTrackInformed(problem, start_state, curr_state, trace)
 
     return actions
-
 
 def euclideanHeuristic(position, problem, info={}):
     "The Euclidean distance heuristic for a PositionSearchProblem"
