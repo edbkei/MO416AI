@@ -91,4 +91,6 @@ v0.12 - Updated 20/04/28. Updated mo416pacman.ipynb. Editorial changes.
 
 v0.13 - Updated 2020/04/29. Updated mo416pacman.ipynb (now it possible to specify -p search2Agents only, and not need any longer specify searchAgents), search2.py ("if goal" removed from hill climbing), layoutMO416b (changed one Ghost position to evaluate performance of dfs and A*).
 
+v0.14 - Update 2020/05/01. Updated mo416pacman.ipynb (more requirements updates), search2Agents(food can be in any position in maze), modelingProposal contains search algorithms in high level.
+
 
