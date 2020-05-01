@@ -40,6 +40,7 @@ from game import Actions
 import util
 import time
 import search2
+import numpy as np
 
 class GoWestAgent2(Agent):
     "An agent that goes West until it can't."
@@ -124,9 +125,6 @@ class Search2Agent(Agent):
         totalCost = problem.getCostOfActions(self.actions)
         print('[R17] Path found with total cost g(x) of '+str(totalCost)+ ' in '+str(time.time() - starttime)+'s')
         if '_expanded' in dir(problem): print('Search nodes expanded: '+ str(problem._expanded))
-        if '_visitedlist' in dir(problem): print('Nodes visited: ' + str(problem._visitedlist))
-        if '_path' in dir(problem): print('Solution states: ' + str(problem._path))
-        if '_actions' in dir(problem): print('Solution actions: ' + str(problem._actions))
 
     def getAction(self, state):
         """
@@ -168,6 +166,17 @@ class PositionSearchProblem2(search2.SearchProblem2):
         self.startState = gameState.getPacmanPosition()
         if start != None: self.startState = start
         self.goal = goal
+        #x = gameState.getFood()
+        x=gameState.getFood()
+        for i in range(1,26):
+            for j in range(1,29):
+                if (gameState.hasFood(i,j)):
+                    print("i="+str(i)+",j="+str(j))
+                    goal=(i,j)
+
+        print(goal)
+        #print(type(x))
+        print("gameState.getFood= "+str(gameState.hasFood(1,27)))
         self.costFn = costFn
         self.visualize = visualize
         #print("we are in searchAgents.py ...")
@@ -183,9 +192,6 @@ class PositionSearchProblem2(search2.SearchProblem2):
 
         # For display purposes
         self._visited, self._visitedlist, self._expanded = {}, [], 0 # DO NOT CHANGE
-
-        # MO416
-        self._path, self._actions = [], []
 
     def getStartState(self):
         return self.startState
@@ -232,6 +238,20 @@ class PositionSearchProblem2(search2.SearchProblem2):
             self._visitedlist.append(state)
 
         return successors
+
+    def getFoodPosition(self, gameState):
+        """
+        Returns the cost of a particular sequence of actions. If those actions
+        include an illegal move, return 999999.
+        """
+        #if actions == None: return self.getStartState()
+        x,y= self.getStartState()
+        cost = 0
+        for (x,y) in gameState.getFood():
+            # Check figure out the next state and see whether its' legal
+            if gameState.hasFood(x,y):
+                return (x,y)
+        return (x,y)
 
     def getCostOfActions(self, actions):
         """
