@@ -93,4 +93,7 @@ v0.13 - Updated 2020/04/29. Updated mo416pacman.ipynb (now it possible to specif
 
 v0.14 - Update 2020/05/01. Updated mo416pacman.ipynb (more requirements updates), search2Agents(food can be in any position in maze), modelingProposal contains search algorithms in high level.
 
+v0.15 - Updated 2020/05/01. Updated mo416pacman.ipynb with new requirements complied. modelingClasses introduced ppt and pdf. 
+Deleted unnecessary files .py.
+
 
