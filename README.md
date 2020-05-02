@@ -97,5 +97,5 @@ v0.15 - Updated 2020/05/01. Updated mo416pacman.ipynb with new requirements comp
 Deleted unnecessary files .py.
 
 v.016 - Updated 2020/05/02. updated mo416pacman.ipynb with more requirement traceability. Missing requirement items to reach v1.0, and be delivered to professor. Requirement [R6] computational cost, [R7] completeness, [R24] optimality, and [R16] The objective state test.
-Also, it shall be deleted unnecessary folders, only keeping folder Prototype3.
+Also, it shall be deleted unnecessary folders, only keeping folder Prototype3. Put your name and RA in the notebook by using github.
 
