@@ -96,4 +96,6 @@ v0.14 - Update 2020/05/01. Updated mo416pacman.ipynb (more requirements updates)
 v0.15 - Updated 2020/05/01. Updated mo416pacman.ipynb with new requirements complied. modelingClasses introduced ppt and pdf. 
 Deleted unnecessary files .py.
 
+v.016 - Updated 2020/05/02. updated mo416pacman.ipynb with more requirement traceability. Missing requirement items to reach v1.0, and be delivered to professor. Requirement [R6] computational cost, [R7] completeness, [R24] optimality, and [R16] The objective state test.
+Also, it shall be deleted unnecessary folders, only keeping folder Prototype3.
 
