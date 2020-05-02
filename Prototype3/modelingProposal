@@ -372,3 +372,17 @@ end while
 
 actions list := reverse the actions list;
 }
+
+--------------------------------------------------------------------------------------------------------
+function MANHATTAN_HEURISTIC(position, problem) returns a absolute value float {
+# The aim is to return a list of actions pacman to reach the goal (a food) by
+# searching the shallowest nodes or states in the search tree first.
+#
+input: problem (a tuple of start_state, action, cost, goalState), position
+xy1 := position;
+xy2 := problem.goalState;
+# xy1, xy2 are in coordinated axis (i, j)
+
+return absolute value (xy1(i,) - xy2(i,) + absolute value (xy1(,j)- xy2(,j))
+
+-----------------------------------------------------------------------------------
