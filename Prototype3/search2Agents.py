@@ -125,6 +125,9 @@ class Search2Agent(Agent):
         totalCost = problem.getCostOfActions(self.actions)
         print('[R17] Path found with total cost g(x) of '+str(totalCost)+ ' in '+str(time.time() - starttime)+'s')
         if '_expanded' in dir(problem): print('Search nodes expanded: '+ str(problem._expanded))
+        if '_visitedlist' in dir(problem): print('Nodes visited: ' + str(problem._visitedlist))
+        if '_path' in dir(problem): print('Solution states: ' + str(problem._path))
+        if '_actions' in dir(problem): print('Solution actions: ' + str(problem._actions))
 
     def getAction(self, state):
         """

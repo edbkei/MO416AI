@@ -89,13 +89,15 @@ def depthFirstSearch(problem):
     """
 
     stack = util.Stack()
-    trace = util.Stack()
+    traceAction = util.Stack()
+    traceState = util.Stack()
 
     traveled = []
     step_counter = 0
 
     start_state = problem.getStartState()
     stack.push((start_state, step_counter, 'START'))
+    traceState.push(start_state)
 
     while not stack.isEmpty():
         
@@ -105,12 +107,15 @@ def depthFirstSearch(problem):
         
         # record action that get to that state
         if action != 'START':
-            trace.push(action)
+            traceAction.push(action)
+            traceState.push(curr_state)
             step_counter += 1
 
         # check if state is goal
         if problem.isGoalState(curr_state):
-            return trace.list
+            # back track
+            problem = backTrackStackUninformed(problem, traceAction, traceState)
+            return traceAction.list
 
         # get possible next states
         valid_successors = 0
@@ -132,10 +137,8 @@ def depthFirstSearch(problem):
         if valid_successors == 0:
             while step_counter != stack.list[-1][1]: # back until next awaiting state
                 step_counter -= 1
-                trace.pop()
-
-        # back track
-        problem, _ = backTrackUninformed(problem, start_state, curr_state, trace)
+                traceAction.pop()
+                traceState.pop()
     
 
 def breadthFirstSearch(problem):
@@ -348,6 +351,11 @@ def backTrackUninformed(problem, start_state, curr_state, trace):
     problem._path = list(reversed(states))
 
     return problem, actions
+
+def backTrackStackUninformed(problem, traceAction, traceState):
+    problem._actions = traceAction.list
+    problem._path = traceState.list
+    return problem
 
 def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
