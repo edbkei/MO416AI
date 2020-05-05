@@ -120,8 +120,6 @@ def depthFirstSearch(problem):
         # get possible next states
         valid_successors = 0
         successors = problem.getSuccessors(curr_state)
-        #print("we are in search.py ...")
-        #print(successors) # MO416 testing
 
         for successor in successors:
 

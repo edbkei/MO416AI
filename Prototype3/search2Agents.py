@@ -85,7 +85,7 @@ class Search2Agent(Agent):
         #if 'heuristic' not in func.func_code.co_varnames:
         #print('func.__code__.co_varnames: '+str(func.__code__.co_varnames)) # MO416
         if 'heuristic' not in func.__code__.co_varnames:
-            print('[SearchAgent2] using function ' + fn)
+            print('[Search2Agent] using function ' + fn)
             self.searchFunction = func
         else:
             if heuristic in globals().keys():
@@ -94,10 +94,7 @@ class Search2Agent(Agent):
                 heur = getattr(search2, heuristic)
             else:
                 raise AttributeError( heuristic + ' is not a function in searchAgents.py or search.py.')
-            if (fn!='hcs'):
-                print('[Search2Agent] using function %s and [R18] heuristic %s' % (fn, "Manhattan"))
-            else:
-                print('[Search2Agent] using function %s ' % (fn))
+            print('[Search2Agent] using function %s and [R18] heuristic %s' % (fn, "Manhattan"))
             # Note: this bit of Python trickery combines the search algorithm and the heuristic
             self.searchFunction = lambda x: func(x, heuristic=heur)
             #print('heuristic: '+str(heur))
@@ -123,11 +120,11 @@ class Search2Agent(Agent):
         problem = self.searchType(state) # Makes a new search problem
         self.actions  = self.searchFunction(problem) # Find a path
         totalCost = problem.getCostOfActions(self.actions)
-        print('[R17] Path found with total cost g(x) of '+str(totalCost)+ ' in '+str(time.time() - starttime)+'s')
+        print('[R16] Path found with total cost g(x) of '+str(totalCost)+ ' in '+str(time.time() - starttime)+'s')
         if '_expanded' in dir(problem): print('Search nodes expanded: '+ str(problem._expanded))
-        if '_visitedlist' in dir(problem): print('Nodes visited: ' + str(problem._visitedlist))
-        if '_path' in dir(problem): print('Solution states: ' + str(problem._path))
-        if '_actions' in dir(problem): print('Solution actions: ' + str(problem._actions))
+        if '_visitedlist' in dir(problem): print('[R13] Nodes visited: ' + str(problem._visitedlist))
+        if '_path' in dir(problem): print('[R13] Solution states: ' + str(len(problem._path)) + ' - ' + str(problem._path))
+        if '_actions' in dir(problem): print('[R14] Solution actions: ' + str(problem._actions))
 
     def getAction(self, state):
         """
@@ -185,11 +182,11 @@ class PositionSearchProblem2(search2.SearchProblem2):
         #print("we are in searchAgents.py ...")
         #print("print layout")
         #print(str(gameState.getWalls())) # MO416 testing
-        print("[R13] Initial position of pacman is "+str(gameState.getPacmanPosition())) # MO416 testing
-        print("[R11] Final goal position is "+str(goal))
-        print("[R22] Ghost Positions is/are "+str(gameState.getGhostPositions()))
+        print("[R12] Initial position of pacman is "+str(gameState.getPacmanPosition())) # MO416 testing
+        print("[R10] Final goal position is "+str(goal))
+        print("[R11] Ghost Positions is/are "+str(gameState.getGhostPositions()))
         print("Number of foods is "+str(gameState.getNumFood())) # MO416 testing
-        print("[R16] has the game food? "+str(gameState.hasFood(*goal))) # MO416 testing
+        print("[R15] has the game food? "+str(gameState.hasFood(*goal))) # MO416 testing
         if warn and (gameState.getNumFood() != 1 or not gameState.hasFood(*goal)):
             print('Warning: this does not look like a regular search maze')
 
