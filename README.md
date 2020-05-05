@@ -99,3 +99,5 @@ Deleted unnecessary files .py.
 v.016 - Updated 2020/05/02. updated mo416pacman.ipynb with more requirement traceability. Missing requirement items to reach v1.0, and be delivered to professor. Requirement [R6] computational cost, [R7] completeness, [R24] optimality, and [R16] The objective state test.
 Also, it shall be deleted unnecessary folders, only keeping folder Prototype3. Put your name and RA in the notebook by using github.
 
+v.017 - Updated 2020/05/05. Updated with addition of euclidean heuristic for gbfs and astar. Updated mo416pacman.ipynb, search2.py, search2Agents.py, layooutMO416b.lay (only one ghost position change), modellingClasses (.ppt and .pdf), modellingProposal. Put your name and RA in the notebook by using github.
+
