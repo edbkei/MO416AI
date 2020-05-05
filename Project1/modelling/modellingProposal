@@ -107,6 +107,7 @@ while stack is not empty do
 
 end while
 }
+
 -----------------------------------------------------------------------------------
 
 function A_STAR_SEARCH(problem) returns a list of actions towards the pacman goal {
@@ -120,6 +121,93 @@ openList := class PriorityQueue();
 g := empty list; # step cost
 start_state := CREATE-NODE(START-STATE[problem]);
 Define function f(current_state) returns g[current_state] + manhattanHeuristic(current_state, problem);
+g[start_state] := 0; # cost 0 initially
+Push(start_state, 0) into openList;
+start openSeen list;
+close_list := empty list;
+trace := empty list;
+trace[start_state] := a tuple with [None, None, 0]
+
+while openList is not empty do
+    current_state := get popping open_list;
+	remove (current_state) from openSeen list;
+	if goal in problem is reached at current_state then break;
+	
+	successors := getSuccessors from current_state in problem;
+	
+	for successor in successors do
+	    next_state := state from successor;
+		next_action = action from successor;
+		next_cost := cost from successor;
+		successor_cost := g[current_state] + next_cost;
+		
+	    UPDATE status := False;
+		if next_state in openSeen list do
+		   if g[next_state] =< successor_cost then pass;
+		   else do
+		           g[next_state] =< successor_cost;
+				   Update openList with item=next_state and priority=f(next_state);
+		        end do 
+		   else if next_state in close_list do
+		        if g[next_state] =< successor_cost then pass;
+				else UPDATE status := True;
+				end if
+		   else: UDPATE status := True
+		   end if;
+		end if;
+		
+		if UPDATE status is True then
+		   g[next_state] := succcessor_cost;
+		   openList update with item=next_state and priority=f(next_state)
+		   Append (next) into openSeen;
+		   
+		   if next_state in close_list then
+		      remove(next_state) from close_list;
+			  remove(next_state) from openSeen
+		   end if;
+		end if;
+		
+		# update and allow tracing to the best state
+		if next_state in trace then
+		   if cost in trace[next_state] > successor_cost then
+		      trace[next_state] state := current_state;
+			  trace[next_state] := next_action;
+			  trace[next_state] cost := successor_cost;
+		   end if;
+		end if;
+		
+		
+	end for;
+	
+	Append(current_state) into close_list;
+
+end while
+
+actions list := empty list;
+backtrack_state := current_state;
+
+while backtrack_state is not start_state do
+     prev_state, action, _ := trace[backtrack_state]
+	 append (action) into actions list;
+	 backtrack_state := prev_state;
+end while
+
+actions list := reverse the actions list;
+}
+
+-----------------------------------------------------------------------------------
+
+function A_STAR_EUCLIDEAN_SEARCH(problem) returns a list of actions towards the pacman goal {
+# the pacman goal is to get the food at n-interactions with cost f(n) = h(n)
+#
+input: problem (a tuple of start_state, action, cost, goalState)
+# node or state has the same meaning for pacman game
+local variables: current_state (a node) and next_state (a neighbor node)
+
+openList := class PriorityQueue();
+g := empty list; # step cost
+start_state := CREATE-NODE(START-STATE[problem]);
+Define function f(current_state) returns g[current_state] + euclideanHeuristic(current_state, problem);
 g[start_state] := 0; # cost 0 initially
 Push(start_state, 0) into openList;
 start openSeen list;
@@ -280,6 +368,96 @@ actions list := reverse the actions list;
 }
 
 -----------------------------------------------------------------------------------
+function GREEDY_BEST_FIRST_EUCLIDEAN_SEARCH(problem) returns a list of actions towards the pacman goal {
+# the pacman goal is to get the food at n-interactions with cost f(n) = g(n) + h(n)
+#
+input: problem (a tuple of start_state, action, cost, goalState)
+# node or state has the same meaning for pacman game
+local variables: current_state (a node) and next_state (a neighbor node)
+
+openList := class PriorityQueue();
+g := empty list; # step cost
+start_state := CREATE-NODE(START-STATE[problem]);
+Define function f(current_state) returns euclideanHeuristic(current_state, problem);  
+                                                    # difference from A* is only here
+g[start_state] := 0; # cost 0 initially
+Push(start_state, 0) into openList;
+start openSeen list;
+close_list := empty list;
+trace := empty list;
+trace[start_state] := a tuple with [None, None, 0]
+
+while openList is not empty do
+    current_state := get popping open_list;
+	if current_state is in openSeen then
+	   remove (current_state) from openSeen list;
+	end if;
+	if goal in problem is reached at current_state then break;
+	end if;
+	successors := getSuccessors from current_state in problem;
+	
+	for successor in successors do
+	    next_state := state from successor;
+		next_action = action from successor;
+		next_cost := cost from successor;
+		successor_cost := g[current_state] + next_cost;
+		
+	    UPDATE status := False;
+		if next_state in openSeen list do
+		   if g[next_state] =< successor_cost then pass;
+		   else do
+		           g[next_state] =< successor_cost;
+				   Update openList with item=next_state and priority=f(next_state);
+		        end do 
+		   else if next_state in close_list do
+		        if g[next_state] =< successor_cost then pass;
+				else UPDATE status := True;
+				end if
+		   else: UDPATE status := True
+		   end if;
+		end if;
+		
+		if UPDATE status is True then
+		   g[next_state] := succcessor_cost;
+		   openList update with item=next_state and priority=f(next_state)
+		   Append (next) into openSeen;
+		   
+		   if next_state in close_list then
+		      remove(next_state) from close_list;
+			  remove(next_state) from openSeen
+		   end if;
+		end if;
+		
+		# update and allow tracing to the best state
+		if next_state in trace then
+		   if cost in trace[next_state] > successor_cost then
+		      trace[next_state] state := current_state;
+			  trace[next_state] := next_action;
+			  trace[next_state] cost := successor_cost;
+		   end if;
+		end if;
+		
+		
+	end for;
+	
+	Append(current_state) into close_list;
+
+end while
+
+actions list := empty list;
+backtrack_state := current_state;
+
+while backtrack_state is not start_state do
+     prev_state, action, _ := trace[backtrack_state]
+	 append (action) into actions list;
+	 backtrack_state := prev_state;
+end while
+
+actions list := reverse the actions list;
+}
+
+-----------------------------------------------------------------------------------
+
 
 function HILL-CLIMBING(problem) returns a list of actions towards the pacman goal {
 # the top of hill is the pacman goal
@@ -373,7 +551,7 @@ end while
 actions list := reverse the actions list;
 }
 
---------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
 function MANHATTAN_HEURISTIC(position, problem) returns a absolute value float {
 # The aim is to return a list of actions pacman to reach the goal (a food) by
 # searching the shallowest nodes or states in the search tree first.
@@ -384,5 +562,17 @@ xy2 := problem.goalState;
 # xy1, xy2 are in coordinated axis (i, j)
 
 return absolute value (xy1(i,) - xy2(i,) + absolute value (xy1(,j)- xy2(,j))
+
+-----------------------------------------------------------------------------------
+function EUCLIDEAN_HEURISTIC(position, problem) returns a absolute value float {
+# The aim is to return a list of actions pacman to reach the goal (a food) by
+# searching the shallowest nodes or states in the search tree first.
+#
+input: problem (a tuple of start_state, action, cost, goalState), position
+xy1 := position;
+xy2 := problem.goalState;
+# xy1, xy2 are in coordinated axis (i, j)
+
+return int(( (xy1(i,) - xy2(i,)) ** 2 + (xy1(,j) - xy2(,j)) ** 2 ) ** 0.5)
 
 -----------------------------------------------------------------------------------
