@@ -94,7 +94,14 @@ class Search2Agent(Agent):
                 heur = getattr(search2, heuristic)
             else:
                 raise AttributeError( heuristic + ' is not a function in searchAgents.py or search.py.')
-            print('[Search2Agent] using function %s and [R18] heuristic %s' % (fn, "Manhattan"))
+            if (fn != 'hcs'):
+                print('[Search2Agent] using function %s and [R18] heuristic %s' % (fn, "Manhattan"))
+            elif (fn == 'astare'):
+                print('[Search2Agent] using function %s and [R18] heuristic %s' % (fn, "Euclidean"))
+            elif (fn == 'gbfse'):
+                print('[Search2Agent] using function %s and [R18] heuristic %s' % (fn, "Euclidean"))
+            else:
+                print('[Search2Agent] using function %s ' % (fn))
             # Note: this bit of Python trickery combines the search algorithm and the heuristic
             self.searchFunction = lambda x: func(x, heuristic=heur)
             #print('heuristic: '+str(heur))
@@ -171,7 +178,7 @@ class PositionSearchProblem2(search2.SearchProblem2):
         for i in range(1,26):
             for j in range(1,29):
                 if (gameState.hasFood(i,j)):
-                    print("i="+str(i)+",j="+str(j))
+                    #print("i="+str(i)+",j="+str(j))
                     self.goal=(i,j)
 
         #print(goal)

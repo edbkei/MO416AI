@@ -318,6 +318,91 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 
     return actions
 
+def aStarEuclideanSearch(problem, heuristic=nullHeuristic):
+    """Search the node that has the lowest combined cost and heuristic first."""
+    start_state = problem.getStartState()
+
+    g = {}
+    g[start_state] = 0
+
+    def f(curr_node):
+        return float(g[curr_node] + euclideanHeuristic(curr_node, problem))
+
+    open_list = util.PriorityQueue()
+    open_list.push(start_state, 0)
+    open_seen = [start_state]  # for 'in' operator, as PriorityQueueWithFunction records a tuple with priority
+    close_list = []
+    trace = {}
+    trace[start_state] = [None, None, 0]
+
+    while not open_list.isEmpty():
+
+        # arrive at state
+        curr_state = open_list.pop()
+        open_seen.remove(curr_state)
+
+        # check if state is goal
+        if problem.isGoalState(curr_state):
+            break
+
+        # get possible next states
+        successors = problem.getSuccessors(curr_state)
+        # print(successors) # MO416 testinig
+
+        for successor in successors:
+
+            next_state = successor[0]
+            next_action = successor[1]
+            next_cost = successor[2]
+            successor_cost = g[curr_state] + next_cost
+
+            UPDATE = False
+            if next_state in open_seen:
+                if g[next_state] <= successor_cost:
+                    pass
+                else:
+                    g[next_state] = successor_cost
+                    open_list.update(item=next_state, priority=f(next_state))
+            elif next_state in close_list:
+                if g[next_state] <= successor_cost:
+                    pass
+                else:
+                    UPDATE = True
+            else:
+                UPDATE = True
+
+            if UPDATE:
+                g[next_state] = successor_cost
+                open_list.update(item=next_state, priority=f(next_state))
+                open_seen.append(next_state)
+
+                if next_state in close_list:
+                    close_list.remove(next_state)
+                    open_seen.remove(next_state)
+
+            # update and allow tracing to the best state
+            if next_state in trace:
+                if trace[next_state][2] > successor_cost:
+                    trace[next_state][0] = curr_state
+                    trace[next_state][1] = next_action
+                    trace[next_state][2] = successor_cost
+            else:
+                trace[next_state] = [curr_state, next_action, successor_cost]
+
+        close_list.append(curr_state)
+
+    # back track
+    actions = []
+    backtrack_state = curr_state  # the goal state
+    while backtrack_state != start_state:
+        prev_state, action, _ = trace[backtrack_state]
+        actions.append(action)
+        backtrack_state = prev_state
+    actions = list(reversed(actions))
+
+    return actions
+
+
 def backTrackInformed(problem, start_state, curr_state, trace):
     actions = []
     states = []
@@ -443,6 +528,104 @@ def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
 
     # back track
     problem, actions = backTrackInformed(problem, start_state, curr_state, trace)
+
+    return actions
+
+def greedyBestFirstEuclideanSearch(problem, heuristic=nullHeuristic):
+    """Search the node that has the lowest combined cost and heuristic first."""
+    # https://www.mygreatlearning.com/blog/best-first-search-bfs/
+    start_state = problem.getStartState()
+
+    g = {}
+    g[start_state] = 0
+    #h = euclideanHeuristic(problem.getStartState, problem)
+    def f(curr_node):
+        return float(euclideanHeuristic(curr_node, problem))
+        #return float(g[curr_node] + manhattanHeuristic(curr_node, problem))
+    #def f(curr_node):
+        #print("g="+str(g[curr_node])+",h="+str(euclideanHeuristic(curr_node, problem)))
+        #return float(euclideanHeuristic(curr_node, problem))
+        #return float(g[curr_node] + euclideanHeuristic(curr_node, problem))
+
+    open_list = util.PriorityQueue()
+    open_list.push(start_state, 0)
+    open_seen = [start_state]  # for 'in' operator, as PriorityQueueWithFunction records a tuple with priority
+    close_list = []
+    trace = {}
+    trace[start_state] = [None, None, 0]
+
+    while not open_list.isEmpty():
+
+        # arrive at state
+        curr_state = open_list.pop()
+        #h=euclideanHeuristic(curr_node, problem)
+        #print('curr_state='+str(curr_state))
+        #print(open_seen)
+        if curr_state in open_seen:
+           open_seen.remove(curr_state)
+
+        # check if state is goal
+        if problem.isGoalState(curr_state):
+            break
+
+        # get possible next states
+        successors = problem.getSuccessors(curr_state)
+        #print(successors)  # MO416 testinig
+
+        for successor in successors:
+
+            next_state = successor[0]
+            next_action = successor[1]
+            next_cost = successor[2]
+            successor_cost = g[curr_state] + next_cost
+
+            UPDATE = False
+            #print("successor_cost="+str(successor_cost))
+            if next_state in open_seen:
+                h=euclideanHeuristic(next_state, problem)
+                #print("h="+str(h))
+                #if(h==0):pass
+                if g[next_state] <= successor_cost:
+                    pass
+                else:
+                    g[next_state] = successor_cost
+                    open_list.update(item=next_state, priority=f(next_state))
+            elif next_state in close_list:
+                if g[next_state] <= successor_cost:
+                    pass
+                else:
+                    UPDATE = True
+            else:
+                UPDATE = True
+
+            if UPDATE:
+                g[next_state] = successor_cost
+                open_list.update(item=next_state, priority=f(next_state))
+                open_seen.append(next_state)
+
+                if next_state in close_list:
+                    close_list.remove(next_state)
+                    open_seen.remove(next_state)
+
+            # update and allow tracing to the best state
+            if next_state in trace:
+                if trace[next_state][2] > successor_cost:
+                    trace[next_state][0] = curr_state
+                    trace[next_state][1] = next_action
+                    trace[next_state][2] = successor_cost
+            else:
+                trace[next_state] = [curr_state, next_action, successor_cost]
+
+        close_list.append(curr_state)
+
+    # back track
+    actions = []
+    backtrack_state = curr_state  # the goal state
+    while backtrack_state != start_state:
+        prev_state, action, _ = trace[backtrack_state]
+        actions.append(action)
+        backtrack_state = prev_state
+    actions = list(reversed(actions))
 
     return actions
 
@@ -588,8 +771,10 @@ def manhattanHeuristic(position, problem, info={}):
 
 # Abbreviations
 astar = aStarSearch
+astare = aStarEuclideanSearch
 bfs = breadthFirstSearch
 dfs = depthFirstSearch
 gbfs = greedyBestFirstSearch
+gbfes = greedyBestFirstEuclideanSearch
 hcs = hillClimbingSearch
 ucs = uniformCostSearch
