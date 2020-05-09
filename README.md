@@ -1,5 +1,20 @@
 # MO416AI
 
+MC906/MO416 - Introduction to Artificial Intelligence
+
+Project 1 - Pacman with AI
+
+Institute of Computing - Unicamp
+
+Prof. Esther Colombini
+
+Eduardo S. Ito (RA159086)
+
+Lucas Peres (RA 265193)
+
+Thales E. Nazatto (RA 074388)
+
+
 # Objetive
 1- Comply MO416AI/Prototype3 with Project objectives (MO416AI/Prototype4maT/project.pdf), using the maximum possible the algorithms given in https://github.com/aimacode/aima-python/blob/master/search.ipynb
 
