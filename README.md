@@ -17,9 +17,9 @@
 
 8- Check tkint in game.py, moviment shall be very understood in python3. OK. Done
 
-9- 2 minutes videos of project shall be prepared. ONGOING
+9- 2 minutes videos of project shall be prepared. OK
 
-10- Jupyter notebook shall be prepared (MO416AI/Prototype3/pacman.ipynb). ONGOING. mo416pacman.ipynb started.
+10- Jupyter notebook shall be prepared (MO416AI/Prototype3/pacman.ipynb). OK
 
 11- Test new layout output.txt. OK. New layout layoutMO416b.lay is the valid one.
 
