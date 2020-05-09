@@ -101,3 +101,5 @@ Also, it shall be deleted unnecessary folders, only keeping folder Prototype3. P
 
 v.017 - Updated 2020/05/05. Updated with addition of euclidean heuristic for gbfs and astar. Updated mo416pacman.ipynb, search2.py, search2Agents.py, layooutMO416b.lay (only one ghost position change), modellingClasses (.ppt and .pdf), modellingProposal. Put your name and RA in the notebook by using github.
 
+v1.0 - Updated 2020/05/09. Delivery Date.
+
