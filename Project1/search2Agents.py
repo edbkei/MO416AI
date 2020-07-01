@@ -139,7 +139,7 @@ class PositionSearchProblem2(search2.SearchProblem2):
     Note: this search problem is fully specified; you should NOT change it.
     """
 
-    def __init__(self, gameState, costFn = lambda x: 1, goal=(1,3), start=None, warn=True, visualize=True):
+    def __init__(self, gameState, costFn = lambda x: 1, goal=(27,4), start=None, warn=True, visualize=True):
         """
         Stores the start and goal.
 
@@ -151,8 +151,36 @@ class PositionSearchProblem2(search2.SearchProblem2):
         self.startState = gameState.getPacmanPosition()
         if start != None: self.startState = start
 
-        for i in range(1,26):
-            for j in range(1,29):
+        #for i in range(1,26):
+        #    for j in range(1,29):
+        #        if (gameState.hasWall(i,j)):
+        #            print('i=',i,'j=',j)
+        n=0
+        try:
+            for j in range(1, 40):
+                n=j
+                x=gameState.hasWall(1, j)
+            # TimeoutFunction(getattr(gradingModule, q),1200)(self) # Call the question's function
+        #except Exception(inst):
+            #self.addExceptionMessage(q, inst, traceback)
+            #self.addErrorHints(exceptionMap, inst, q[1])
+        except:
+            n=n
+        m=0
+        try:
+            for i in range(1, 40):
+                m=i
+                x=gameState.hasWall(i, 1)
+            # TimeoutFunction(getattr(gradingModule, q),1200)(self) # Call the question's function
+        #except Exception(inst):
+            #self.addExceptionMessage(q, inst, traceback)
+            #self.addErrorHints(exceptionMap, inst, q[1])
+        except:
+            m=m
+        print('maze dimension: ',m,'x',n)
+
+        for i in range(1,m):
+            for j in range(1,n):
                 if (gameState.hasFood(i,j)):
                     self.goal=(i,j)
 
@@ -160,7 +188,7 @@ class PositionSearchProblem2(search2.SearchProblem2):
         self.visualize = visualize
 
         print("[R12] Initial position of pacman is "+str(gameState.getPacmanPosition()))
-        print("[R10] Final goal position is "+str(goal))
+        print("[R10] Final goal position is "+str(self.goal))
         print("[R11] Ghost Positions is/are "+str(gameState.getGhostPositions()))
         print("Number of foods is "+str(gameState.getNumFood()))
         print("[R15] has the game food? "+str(gameState.hasFood(*goal)))
