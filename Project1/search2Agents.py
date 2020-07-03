@@ -139,14 +139,17 @@ class PositionSearchProblem2(search2.SearchProblem2):
     Note: this search problem is fully specified; you should NOT change it.
     """
 
-    def __init__(self, gameState, costFn = lambda x: 1, goal=(27,4), start=None, warn=True, visualize=True):
+    def __init__(self, gameState, costFn = lambda x: 1, goals=(27,4), start=None, warn=True, visualize=True):
         """
         Stores the start and goal.
 
         gameState: A GameState object (pacman.py)
         costFn: A function from a search state (tuple) to a non-negative number
-        goal: A position in the gameState
+        goals: A position in the gameState
         """
+        self.goals=[]
+        self.remainingFoods = gameState.getNumFood()
+        self.gameState = gameState
         self.walls = gameState.getWalls()
         self.startState = gameState.getPacmanPosition()
         if start != None: self.startState = start
@@ -182,17 +185,17 @@ class PositionSearchProblem2(search2.SearchProblem2):
         for i in range(1,m):
             for j in range(1,n):
                 if (gameState.hasFood(i,j)):
-                    self.goal=(i,j)
+                    self.goals.append((i,j))
 
         self.costFn = costFn
         self.visualize = visualize
 
         print("[R12] Initial position of pacman is "+str(gameState.getPacmanPosition()))
-        print("[R10] Final goal position is "+str(self.goal))
+        print("[R10] Final goal position is "+str(self.goals))
         print("[R11] Ghost Positions is/are "+str(gameState.getGhostPositions()))
         print("Number of foods is "+str(gameState.getNumFood()))
-        print("[R15] has the game food? "+str(gameState.hasFood(*goal)))
-        if warn and (gameState.getNumFood() != 1 or not gameState.hasFood(*goal)):
+        print("[R15] has the game food? "+str(gameState.hasFood(*goals)))
+        if warn and (gameState.getNumFood() != 1 or not gameState.hasFood(*goals)):
             print('Warning: this does not look like a regular search maze')
 
         # For display purposes
@@ -202,10 +205,13 @@ class PositionSearchProblem2(search2.SearchProblem2):
         return self.startState
 
     def isGoalState(self, state):
-        isGoal = state == self.goal
+        if(state in self.goals):
+            self.remainingFoods -= 1
+
+        isGoal = self.remainingFoods == 0
 
         # For display purposes only
-        if isGoal and self.visualize:
+        if self.visualize:
             self._visitedlist.append(state)
             import __main__
             if '_display' in dir(__main__):
@@ -301,11 +307,11 @@ class StayWestSearchAgent2(Search2Agent):
 def manhattanHeuristic(position, problem, info={}):
     "The Manhattan distance heuristic for a PositionSearchProblem"
     xy1 = position
-    xy2 = problem.goal
+    xy2 = problem.goals[problem.gameState.getNumFood()-problem.remainingFoods]
     return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
 
 def euclideanHeuristic(position, problem, info={}):
     "The Euclidean distance heuristic for a PositionSearchProblem"
     xy1 = position
-    xy2 = problem.goal
+    xy2 = problem.goals[problem.gameState.getNumFood() - problem.remainingFoods]
     return ( (xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2 ) ** 0.5

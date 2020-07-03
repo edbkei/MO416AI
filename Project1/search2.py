@@ -133,6 +133,7 @@ def depthFirstSearch(problem):
 
         # dead end, step backwards
         if valid_successors == 0:
+            print(stack.list)
             while step_counter != stack.list[-1][1]: # back until next awaiting state
                 step_counter -= 1
                 traceAction.pop()
