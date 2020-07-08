@@ -19,6 +19,7 @@ Pacman agents (in searchAgents.py).
 
 import util
 import random
+import heapq
 
 class SearchProblem2:
     """
@@ -29,6 +30,12 @@ class SearchProblem2:
     """
 
     def getStartState(self):
+        """
+        Returns the start state for the search problem.
+        """
+        util.raiseNotDefined()
+
+    def getFoodPositions(self):
         """
         Returns the start state for the search problem.
         """
@@ -88,98 +95,96 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
 
-    stack = util.Stack()
-    traceAction = util.Stack()
-    traceState = util.Stack()
+    Frontier = util.Stack()
+    Visited = []
+    Frontier.push((problem.getStartState(), []))
+    Visited.append(problem.getStartState())
+    prepath = util.Stack()
+    path=[]
+    Visited = []
 
-    traveled = []
-    step_counter = 0
+    while Frontier.isEmpty() == 0:
+        state, actions = Frontier.pop()
+        prepath.push((state[0], []))
 
-    start_state = problem.getStartState()
-    stack.push((start_state, step_counter, 'START'))
-    traceState.push(start_state)
+        for next in problem.getSuccessors(state):
+            n_state = next[0]
+            n_direction = next[1]
+            if n_state not in Visited:
+                if problem.isGoalState(n_state):
+                    visited = []
+                    for i in Visited:
+                        visited.append(i[0])
+                    while not prepath.isEmpty():
+                        x = prepath.pop()
+                        path.append(x[0])
 
-    while not stack.isEmpty():
-        
-        # arrive at state
-        curr_state, _, action = stack.pop()
-        traveled.append(curr_state)
-        
-        # record action that get to that state
-        if action != 'START':
-            traceAction.push(action)
-            traceState.push(curr_state)
-            step_counter += 1
+                    print('[R13] Nodes visited:', visited)
+                    m=list(reversed(path))
+                    m.append(n_state[0])
+                    print('[R13] Solution states:', m)
+                    print('[R14] Solution actions:', actions+[n_direction])
+                    # print 'Find Goal'
+                    return actions + [n_direction]
+                else:
+                    Frontier.push((n_state, actions + [n_direction]))
+                    Visited.append(n_state)
 
-        # check if state is goal
-        if problem.isGoalState(curr_state):
-            # back track
-            problem = backTrackStackUninformed(problem, traceAction, traceState)
-            return traceAction.list
+    util.raiseNotDefined()
 
-        # get possible next states
-        valid_successors = 0
-        successors = problem.getSuccessors(curr_state)
 
-        for successor in successors:
+#util.raiseNotDefined()
 
-            next_state = successor[0]
-            next_action = successor[1]
+    #print('[R13] Nodes visited:',visited)
+    #print('[R13] Solution states:', states)
+    #print('[R14] Solution actions:',path)
+    #return path
 
-            # avoid traveling back to previous states
-            if next_state not in traveled:
-                valid_successors += 1
-                stack.push((next_state, step_counter, next_action))
-
-        # dead end, step backwards
-        if valid_successors == 0:
-            print(stack.list)
-            while step_counter != stack.list[-1][1]: # back until next awaiting state
-                step_counter -= 1
-                traceAction.pop()
-                traceState.pop()
+    # util.raiseNotDefined()
     
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-    
-    queue = util.Queue()
-    trace = {}
-    seen = []
 
-    start_state = problem.getStartState()
-    queue.push(start_state)
-    seen.append(start_state)
+    """Search the shallowest nodes in the search tree first."""
 
-    while not queue.isEmpty():
-        
-        # arrive at state
-        curr_state = queue.pop()
+    Frontier = util.Queue()
+    Visited = []
+    Frontier.push((problem.getStartState(), []))
+    prepath = util.Stack()
+    path=[]
+    # print 'Start',problem.getStartState()
+    # Visited.append( problem.getStartState() )
 
-        # check if state is goal
-        if problem.isGoalState(curr_state):
-            break
+    while Frontier.isEmpty() == 0:
+        state, actions = Frontier.pop()
+        prepath.push((state[0], []))
 
-        # get possible next states
-        successors = problem.getSuccessors(curr_state)
-        
-        for successor in successors:
+        for next in problem.getSuccessors(state):
+            n_state = next[0]
+            n_direction = next[1]
+            if n_state not in Visited:
+                if problem.isGoalState(n_state):
+                    # print 'Find Goal'
+                    visited = []
+                    for i in Visited:
+                        visited.append(i[0])
+                    while not prepath.isEmpty():
+                        x = prepath.pop()
+                        path.append(x[0])
 
-            next_state = successor[0]
-            next_action = successor[1]
+                    print('[R13] Nodes visited:', visited)
+                    m=list(reversed(path))
+                    m.append(n_state[0])
+                    print('[R13] Solution states:', m)
+                    print('[R14] Solution actions:', actions+[n_direction])
+                    return actions + [n_direction]
+                Frontier.push((n_state, actions + [n_direction]))
+                Visited.append(n_state)
 
-            # avoid traveling back to previous states
-            if next_state not in seen:
-                seen.append(next_state)
-                queue.push(next_state)
-                trace[next_state] = (curr_state, next_action)
+    util.raiseNotDefined()
 
-    # back track
-    problem, actions = backTrackUninformed(problem, start_state, curr_state, trace)
-
-    return actions
-
-
+    # util.raiseNotDefined()
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
@@ -244,80 +249,60 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    start_state = problem.getStartState()
 
-    g = {}
-    g[start_state] = 0
+    def _update(Frontier, item, priority):
+        for index, (p, c, i) in enumerate(Frontier.heap):
+            if i[0] == item[0]:
+                if p <= priority:
+                    break
+                del Frontier.heap[index]
+                Frontier.heap.append((priority, c, item))
+                heapq.heapify(Frontier.heap)
+                break
+        else:
+            Frontier.push(item, priority)
 
-    def f(curr_node):
-        return float(g[curr_node] + heuristic(curr_node, problem))
+    Frontier = util.PriorityQueue()
+    Visited = []
+    Frontier.push((problem.getStartState(), []), heuristic(problem.getStartState(), problem))
+    Visited.append(problem.getStartState())
+    prepath = util.Stack()
+    path=[]
 
-    open_list = util.PriorityQueue()
-    open_list.push(start_state, 0)
-    open_seen = [start_state]  # for 'in' operator, as PriorityQueueWithFunction records a tuple with priority
-    close_list = []
-    trace = {}
-    trace[start_state] = [None, None, 0]
+    while Frontier.isEmpty() == 0:
+        state, actions = Frontier.pop()
+        prepath.push((state[0], []))
+        # print state
+        if problem.isGoalState(state):
+            # print 'Find Goal'
+            visited = []
+            for i in Visited:
+                visited.append(i[0])
+            while not prepath.isEmpty():
+                x = prepath.pop()
+                path.append(x[0])
 
-    while not open_list.isEmpty():
+            print('[R13] Nodes visited:', visited)
+            m = list(reversed(path))
+            print('[R13] Solution states:', m)
+            print('[R14] Solution actions:', actions )
+            # print 'Find Goal'
+            return actions
 
-        # arrive at state
-        curr_state = open_list.pop()
-        open_seen.remove(curr_state)
+        if state not in Visited:
+            Visited.append(state)
 
-        # check if state is goal
-        if problem.isGoalState(curr_state):
-            break
+        for next in problem.getSuccessors(state):
+            n_state = next[0]
+            n_direction = next[1]
+            if n_state not in Visited:
+                _update(Frontier, (n_state, actions + [n_direction]), \
+                        problem.getCostOfActions(actions + [n_direction]) + heuristic(n_state, problem))
 
-        # get possible next states
-        successors = problem.getSuccessors(curr_state)
+    util.raiseNotDefined()
 
-        for successor in successors:
 
-            next_state = successor[0]
-            next_action = successor[1]
-            next_cost = successor[2]
-            successor_cost = g[curr_state] + next_cost
-
-            UPDATE = False
-            if next_state in open_seen:
-                if g[next_state] <= successor_cost:
-                    pass
-                else:
-                    g[next_state] = successor_cost
-                    open_list.update(item=next_state, priority=f(next_state))
-            elif next_state in close_list:
-                if g[next_state] <= successor_cost:
-                    pass
-                else:
-                    UPDATE = True
-            else:
-                UPDATE = True
-
-            if UPDATE:
-                g[next_state] = successor_cost
-                open_list.update(item=next_state, priority=f(next_state))
-                open_seen.append(next_state)
-
-                if next_state in close_list:
-                    close_list.remove(next_state)
-                    open_seen.remove(next_state)
-
-            # update and allow tracing to the best state
-            if next_state in trace:
-                if trace[next_state][2] > successor_cost:
-                    trace[next_state][0] = curr_state
-                    trace[next_state][1] = next_action
-                    trace[next_state][2] = successor_cost
-            else:
-                trace[next_state] = [curr_state, next_action, successor_cost]
-
-        close_list.append(curr_state)
-
-    # back track
-    problem, actions = backTrackInformed(problem, start_state, curr_state, trace)
-
-    return actions
+# util.raiseNotDefined()
 
 
 def backTrackInformed(problem, start_state, curr_state, trace):
@@ -342,13 +327,15 @@ def backTrackUninformed(problem, start_state, curr_state, trace):
     backtrack_state = curr_state # the goal state
     states.append(curr_state)
     while backtrack_state != start_state:
-        prev_state, action = trace[backtrack_state]
+        #print('backtrack_state: ',backtrack_state,'trace[backtrac_state]: ',trace[backtrack_state])
+        prev_state,action,_ = trace[backtrack_state]
         actions.append(action)
         backtrack_state = prev_state
         states.append(prev_state)
     actions = list(reversed(actions))
     problem._actions = actions
     problem._path = list(reversed(states))
+    #print('problem=',problem._path)
 
     return problem, actions
 
@@ -359,221 +346,114 @@ def backTrackStackUninformed(problem, traceAction, traceState):
 
 def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    # https://www.mygreatlearning.com/blog/best-first-search-bfs/
-    start_state = problem.getStartState()
 
-    g = {}
-    g[start_state] = 0
-    def f(curr_node):
-        return float(heuristic(curr_node, problem))
+    def _update(Frontier, item, priority):
+        for index, (p, c, i) in enumerate(Frontier.heap):
+            if i[0] == item[0]:
+                if p <= priority:
+                    break
+                del Frontier.heap[index]
+                Frontier.heap.append((priority, c, item))
+                heapq.heapify(Frontier.heap)
+                break
+        else:
+            Frontier.push(item, priority)
 
-    open_list = util.PriorityQueue()
-    open_list.push(start_state, 0)
-    open_seen = [start_state]  # for 'in' operator, as PriorityQueueWithFunction records a tuple with priority
-    close_list = []
-    trace = {}
-    trace[start_state] = [None, None, 0]
+    Frontier = util.PriorityQueue()
+    Visited = []
+    prepath = util.Stack()
+    path=[]
+    Frontier.push((problem.getStartState(), []), heuristic(problem.getStartState(), problem))
+    Visited.append(problem.getStartState())
 
-    while not open_list.isEmpty():
+    while Frontier.isEmpty() == 0:
+        state, actions = Frontier.pop()
+        prepath.push((state[0], []))
+        # print state
+        if problem.isGoalState(state):
+            visited = []
+            for i in Visited:
+                visited.append(i[0])
+            while not prepath.isEmpty():
+                x = prepath.pop()
+                path.append(x[0])
 
-        # arrive at state
-        curr_state = open_list.pop()
-        if curr_state in open_seen:
-            open_seen.remove(curr_state)
+            print('[R13] Nodes visited:', visited)
+            m = list(reversed(path))
+            print('[R13] Solution states:', m)
+            print('[R14] Solution actions:', actions)
+            # print 'Find Goal'
+            return actions
 
-        # check if state is goal
-        if problem.isGoalState(curr_state):
-            break
+        if state not in Visited:
+            Visited.append(state)
 
-        # get possible next states
-        successors = problem.getSuccessors(curr_state)
+        for next in problem.getSuccessors(state):
+            n_state = next[0]
+            n_direction = next[1]
+            if n_state not in Visited:
+                _update(Frontier, (n_state, actions + [n_direction]), heuristic(n_state, problem))
 
-        for successor in successors:
-            next_state = successor[0]
-            next_action = successor[1]
-            next_cost = successor[2]
-            successor_cost = g[curr_state] + next_cost
+    util.raiseNotDefined()
 
-            UPDATE = False
-            if next_state in open_seen:
-                h=heuristic(next_state, problem)
-                if g[next_state] <= successor_cost:
-                    pass
-                else:
-                    g[next_state] = successor_cost
-                    open_list.update(item=next_state, priority=f(next_state))
-            elif next_state in close_list:
-                if g[next_state] <= successor_cost:
-                    pass
-                else:
-                    UPDATE = True
-            else:
-                UPDATE = True
-
-            if UPDATE:
-                g[next_state] = successor_cost
-                open_list.update(item=next_state, priority=f(next_state))
-                open_seen.append(next_state)
-
-                if next_state in close_list:
-                    close_list.remove(next_state)
-                    open_seen.remove(next_state)
-
-            # update and allow tracing to the best state
-            if next_state in trace:
-                if trace[next_state][2] > successor_cost:
-                    trace[next_state][0] = curr_state
-                    trace[next_state][1] = next_action
-                    trace[next_state][2] = successor_cost
-            else:
-                trace[next_state] = [curr_state, next_action, successor_cost]
-
-        close_list.append(curr_state)
-
-    # back track
-    problem, actions = backTrackInformed(problem, start_state, curr_state, trace)
-
-    return actions
 
 def hillClimbingSearch(problem, heuristic=nullHeuristic):
-    priority_queue = util.PriorityQueue()
-    #print(priority_queue.count)
-    trace = {}
-    seen = []
-    goal=(1,3)
+    """Search the node that has the lowest combined cost and heuristic first."""
 
-    start_state = problem.getStartState()
-    #print(start_state)
-    prev_cost = 0
-    trace[start_state] = [None, None, prev_cost]
-
-    priority_queue.update(start_state, 0)
-    seen.append(start_state)
-    prevsuccessors2 = []
-    prevsuccessors22 = []
-    while not priority_queue.isEmpty():
-
-        # arrive at state
-        curr_state = priority_queue.pop()
-
-        # check if state is goal
-        if problem.isGoalState(curr_state):
-            break
-
-        # get possible next states
-        successors = problem.getSuccessors(curr_state)
-        #print(curr_state)
-        #t=len(successors) # MO416
-        #print(random.randint(0,t-1))
-        #print(successors) # MO416
-        #print(successors[0])
-        t=len(successors) # MO416
-        successors2 = []
-        if(t==1):
-            idx=0
-            successors2=successors
+    def _update(Frontier, item, priority):
+        for index, (p, c, i) in enumerate(Frontier.heap):
+            if i[0] == item[0]:
+                if p <= priority:
+                    break
+                del Frontier.heap[index]
+                Frontier.heap.append((priority, c, item))
+                heapq.heapify(Frontier.heap)
+                break
         else:
-            i=0
-            while True:
-                i=i+1
-                idx = random.randint(0, t - 1)
-                #print(prevsuccessors2)
-                if(prevsuccessors2==[]):
-                    successors2.append(successors[idx])
-                    prevsuccessors2=successors2
-                    break
-                if (successors[idx][0] != prevsuccessors2[0]):
-                    #print(successors)
-                    #print(successors[idx][1])
-                    #print(prevsuccessors2)
-                    #print(prevsuccessors2[0][0])
-                    if(not((successors[idx][1]=='East' and prevsuccessors2[0][1]=='West') \
-                            or (successors[idx][1]=='West' and prevsuccessors2[0][1]=='East') \
-                            or (successors[idx][1]=='South' and prevsuccessors2[0][1]=='North') \
-                            or (successors[idx][1] == 'North' and prevsuccessors2[0][1] == 'South'))):
-                                successors2.append(successors[idx])
-                                prevsuccessors2=successors2
-                                break
-                if (i>5):
-                    idx = random.randint(0, t - 1)
-                    successors2.append(successors[idx])
-                    prevsuccessors2 = successors2
-                    break
-                #successors2.append(successors[idx])
-        #print(str(successors)+" is "+str(successors2))
-        #print(prevsuccessors2)
-        #print(successors)
-        #print(successors2)
+            Frontier.push(item, priority)
+    prepath = util.Stack()
+    Visited = []
+
+    Frontier = util.PriorityQueue()
+    Visited = []
+    path=[]
+    Frontier.push( (problem.getStartState(), []), 0 )
+    Visited.append( problem.getStartState() )
 
 
-        for successor in successors2:
+    while Frontier.isEmpty() == 0:
+        state, actions = Frontier.pop()
+        prepath.push((state[0], []))
 
-            next_state = successor[0]
-            next_action = successor[1]
-            next_cost = successor[2]
+        if problem.isGoalState(state):
+            visited=[]
+            for i in Visited:
+                visited.append(i[0])
+            while not prepath.isEmpty():
+                x=prepath.pop()
+                path.append(x[0])
 
-            if (prevsuccessors22 == []):
-                #prevsuccessors22.append(successor)
-                prevsuccessors22 = successor
-                prev_cost = trace[curr_state][2]
-                seen.append(next_state)
-                #priority_queue.update(next_state, next_cost + prev_cost)
-                priority_queue.update(next_state, 1)
-            elif (not ((next_action == 'East' and prevsuccessors22[0][1] == 'West') \
-                     or (next_action == 'West' and prevsuccessors22[0][1] == 'East') \
-                     or (next_action == 'South' and prevsuccessors22[0][1] == 'North') \
-                     or (next_action == 'North' and prevsuccessors22[0][1] == 'South'))):
-                        #prevsuccessors22.append(successor)
-                        prevsuccessors22 = successor
-                        prev_cost = trace[curr_state][2]
-                        seen.append(next_state)
-                        priority_queue.update(next_state, 1)
-            else:
-                seen.remove(next_state)
+            print('[R13] Nodes visited:',visited)
+            print('[R13] Solution states:',list(reversed(path)))
+            print('[R14] Solution actions:',actions)
+            return actions
 
-            #if next_state not in seen:
-            #    prev_cost = trace[curr_state][2]
-             #   seen.append(next_state)
-                #priority_queue.update(next_state, next_cost + prev_cost)
-             #   priority_queue.update(next_state, 1)
-            #else:
-                #seen.remove(next_state)
+        if state not in Visited:
+            Visited.append( state )
+
+        if(len(Visited)>100):
+            Visited.pop(0)
+
+        for next in problem.getSuccessors(state):
+            n_state = next[0]
+            n_direction = next[1]
+            if n_state not in Visited:
+
+                _update( Frontier, (n_state, actions + [n_direction]), problem.getCostOfActions(actions+[n_direction])+ heuristic(n_state, problem) )
 
 
-            # update and allow tracing to the best state
-            #if next_state in trace:
-                #if trace[next_state][2] > next_cost + prev_cost:
-                    #trace[next_state][2] = next_cost + prev_cost
-                #    trace[next_state][2] = next_cost + prev_cost
-                #    trace[next_state][1] = next_action
-                #    trace[next_state][0] = curr_state
-            #else:
-            #
+    util.raiseNotDefined()
 
-            #print("seen is "+str(seen))
-            if not next_state in trace:
-                #trace[next_state] = [curr_state, next_action, next_cost + prev_cost]
-                trace[next_state] = [curr_state, next_action, 1]
-            #print("trace is "+str(trace))
-            if(curr_state==goal):break
-
-    # back track
-    #print(trace)
-    problem, actions = backTrackInformed(problem, start_state, curr_state, trace)
-
-    return actions
-
-def euclideanHeuristic(position, problem, info={}):
-    "The Euclidean distance heuristic for a PositionSearchProblem"
-    xy1 = position
-    xy2 = problem.goal
-    return int(( (xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2 ) ** 0.5)
-
-def manhattanHeuristic(position, problem, info={}):
-    "The Manhattan distance heuristic for a PositionSearchProblem"
-    xy1 = position
-    xy2 = problem.goal
-    return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
 
 # Abbreviations
 astar = aStarSearch

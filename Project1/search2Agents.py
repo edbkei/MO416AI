@@ -26,7 +26,6 @@ description.
 Please only change the parts of the file you are asked to.  Look for the lines
 that say
 
-"*** YOUR CODE HERE ***"
 
 The parts you fill in start about 3/4 of the way down.  Follow the project
 description for details.
@@ -65,7 +64,8 @@ class Search2Agent(Agent):
     Note: You should NOT change any code in SearchAgent
     """
 
-    def __init__(self, fn='greedySearch', prob='PositionSearchProblem2', heuristic='nullHeuristic'):
+    #def __init__(self, fn='greedySearch', prob='PositionSearchProblem2', heuristic='nullHeuristic'):
+    def __init__(self, fn='depthFirstSearch', prob='FoodSearchProblem2', heuristic='nullHeuristic'):
         if fn not in dir(search2):
             raise AttributeError(fn + ' is not a search function in search2.py.')
         func = getattr(search2, fn)
@@ -112,6 +112,7 @@ class Search2Agent(Agent):
         if '_path' in dir(problem): print('[R13] Solution states: ' + str(len(problem._path)) + ' - ' + str(problem._path))
         if '_actions' in dir(problem): print('[R14] Solution actions: ' + str(problem._actions))
 
+
     def getAction(self, state):
         """
         Returns the next action in the path chosen earlier (in
@@ -139,34 +140,25 @@ class PositionSearchProblem2(search2.SearchProblem2):
     Note: this search problem is fully specified; you should NOT change it.
     """
 
-    def __init__(self, gameState, costFn = lambda x: 1, goals=(27,4), start=None, warn=True, visualize=True):
+    def __init__(self, gameState, costFn = lambda x: 1, goal=(1,1), start=None, warn=True, visualize=True):
         """
         Stores the start and goal.
 
         gameState: A GameState object (pacman.py)
         costFn: A function from a search state (tuple) to a non-negative number
-        goals: A position in the gameState
+        goal: A position in the gameState
         """
+        self.goal=(1,1)
         self.goals=[]
-        self.remainingFoods = gameState.getNumFood()
-        self.gameState = gameState
         self.walls = gameState.getWalls()
         self.startState = gameState.getPacmanPosition()
         if start != None: self.startState = start
 
-        #for i in range(1,26):
-        #    for j in range(1,29):
-        #        if (gameState.hasWall(i,j)):
-        #            print('i=',i,'j=',j)
         n=0
         try:
             for j in range(1, 40):
                 n=j
                 x=gameState.hasWall(1, j)
-            # TimeoutFunction(getattr(gradingModule, q),1200)(self) # Call the question's function
-        #except Exception(inst):
-            #self.addExceptionMessage(q, inst, traceback)
-            #self.addErrorHints(exceptionMap, inst, q[1])
         except:
             n=n
         m=0
@@ -174,10 +166,6 @@ class PositionSearchProblem2(search2.SearchProblem2):
             for i in range(1, 40):
                 m=i
                 x=gameState.hasWall(i, 1)
-            # TimeoutFunction(getattr(gradingModule, q),1200)(self) # Call the question's function
-        #except Exception(inst):
-            #self.addExceptionMessage(q, inst, traceback)
-            #self.addErrorHints(exceptionMap, inst, q[1])
         except:
             m=m
         print('maze dimension: ',m,'x',n)
@@ -185,33 +173,45 @@ class PositionSearchProblem2(search2.SearchProblem2):
         for i in range(1,m):
             for j in range(1,n):
                 if (gameState.hasFood(i,j)):
-                    self.goals.append((i,j))
+                    if(gameState.getNumFood()==1):
+                        self.goal=(i,j)
+                    else:
+                        x=(i,j)
+                        self.goals.append(x)
 
+        #print('goals',self.getFoodPositions())
         self.costFn = costFn
         self.visualize = visualize
-
+        #x=getFoodPosition(gameState)
+        #print("food positions: " )
         print("[R12] Initial position of pacman is "+str(gameState.getPacmanPosition()))
-        print("[R10] Final goal position is "+str(self.goals))
+        print("[R10] Number of foods is "+str(gameState.getNumFood()))
+        if(gameState.getNumFood()>1):
+            print("[R10] Final goal positions are ", self.goals)
+        else:
+            print("[R10] Final goal position is "+str(self.goals))
         print("[R11] Ghost Positions is/are "+str(gameState.getGhostPositions()))
-        print("Number of foods is "+str(gameState.getNumFood()))
-        print("[R15] has the game food? "+str(gameState.hasFood(*goals)))
-        if warn and (gameState.getNumFood() != 1 or not gameState.hasFood(*goals)):
+        print("[R15] has the game food? "+str(gameState.hasFood(*goal)))
+        if warn and (gameState.getNumFood() != 1 or not gameState.hasFood(*goal)):
             print('Warning: this does not look like a regular search maze')
 
         # For display purposes
         self._visited, self._visitedlist, self._expanded = {}, [], 0 # DO NOT CHANGE
 
+
     def getStartState(self):
-        return self.startState
+        return self.startState,self.goals
 
     def isGoalState(self, state):
-        if(state in self.goals):
-            self.remainingFoods -= 1
-
-        isGoal = self.remainingFoods == 0
+        isGoal=False
+        if (len(self.goals)>1):
+            if(state in self.goals):
+                isGoal=True
+        else:
+            isGoal = state == self.goal
 
         # For display purposes only
-        if self.visualize:
+        if isGoal and self.visualize:
             self._visitedlist.append(state)
             import __main__
             if '_display' in dir(__main__):
@@ -219,6 +219,9 @@ class PositionSearchProblem2(search2.SearchProblem2):
                     __main__._display.drawExpandedCells(self._visitedlist) #@UndefinedVariable
 
         return isGoal
+
+    def getFoodPositions(self):
+        return self.goals
 
     def getSuccessors(self, state):
         """
@@ -234,7 +237,9 @@ class PositionSearchProblem2(search2.SearchProblem2):
 
         successors = []
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
-            x,y = state
+            print('search2Agents state',state)
+            state1,goals = state
+            x,y = state1
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
             if not self.walls[nextx][nexty]:
@@ -242,11 +247,12 @@ class PositionSearchProblem2(search2.SearchProblem2):
                 cost = self.costFn(nextState)
                 successors.append( ( nextState, action, cost) )
 
+
         # Bookkeeping for display purposes
         self._expanded += 1 # DO NOT CHANGE
-        if state not in self._visited:
-            self._visited[state] = True
-            self._visitedlist.append(state)
+        if state1 not in self._visited:
+            self._visited[state1] = True
+            self._visitedlist.append(state1)
 
         return successors
 
@@ -270,7 +276,8 @@ class PositionSearchProblem2(search2.SearchProblem2):
         include an illegal move, return 999999.
         """
         if actions == None: return 999999
-        x,y= self.getStartState()
+        initstat,goals1= self.getStartState()
+        x,y=initstat
         cost = 0
         for action in actions:
             # Check figure out the next state and see whether its' legal
@@ -279,6 +286,228 @@ class PositionSearchProblem2(search2.SearchProblem2):
             if self.walls[x][y]: return 999999
             cost += self.costFn((x,y))
         return cost
+
+
+class CornersProblem(search2.SearchProblem2):
+    """
+    This search problem finds paths through all four corners of a layout.
+    You must select a suitable state space and successor function
+    """
+
+    def __init__(self, startingGameState):
+        """
+        Stores the walls, pacman's starting position and corners.
+        """
+        self.walls = startingGameState.getWalls()
+        self.startingPosition = startingGameState.getPacmanPosition()
+        top, right = self.walls.height - 2, self.walls.width - 2
+        self.corners = ((1, 1), (1, top), (right, 1), (right, top))
+        for corner in self.corners:
+            if not startingGameState.hasFood(*corner):
+                print
+                'Warning: no food in corner ' + str(corner)
+        self._expanded = 0  # DO NOT CHANGE; Number of search nodes expanded
+        # Please add any code here which you would like to use
+        # in initializing the problem
+
+        self.startingGameState = startingGameState
+
+    def getStartState(self):
+        """
+        Returns the start state (in your state space, not the full Pacman state
+        space)
+        """
+        """ A state space can be the start coordinates and a list to hold visited corners"""
+        return (self.startingPosition, [])
+        # util.raiseNotDefined()
+
+    def isGoalState(self, state):
+        """
+        Returns whether this search state is a goal state of the problem.
+        """
+
+        """ Check to see if a state is a corner, and if so are the other corners visited"""
+        xy = state[0]
+        visitedCorners = state[1]
+        if xy in self.corners:
+            if not xy in visitedCorners:
+                visitedCorners.append(xy)
+            return len(visitedCorners) == 4
+        return False
+
+        # util.raiseNotDefined()
+
+    def getSuccessors(self, state):
+        """
+        Returns successor states, the actions they require, and a cost of 1.
+         As noted in search.py:
+            For a given state, this should return a list of triples, (successor,
+            action, stepCost), where 'successor' is a successor to the current
+            state, 'action' is the action required to get there, and 'stepCost'
+            is the incremental cost of expanding to that successor
+        """
+        successors = []
+        x, y = state[0]
+        visitedCorners = state[1]
+        for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
+            # Add a successor state to the successor list if the action is legal
+            # Here's a code snippet for figuring out whether a new position hits a wall:
+            #   x,y = currentPosition
+            #   dx, dy = Actions.directionToVector(action)
+            #   nextx, nexty = int(x + dx), int(y + dy)
+            #   hitsWall = self.walls[nextx][nexty]
+
+
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            hitsWall = self.walls[nextx][nexty]
+            if not hitsWall:
+                # Initialize a list of Visited corners for a successor using the visited corner list in state space.
+                successorVisitedCorners = list(visitedCorners)
+                next_node = (nextx, nexty)
+                # Add node to the Visited corner list if it is a corner and not already in the list
+                if next_node in self.corners:
+                    if not next_node in successorVisitedCorners:
+                        successorVisitedCorners.append(next_node)
+                # Create a new state according to the state space and append it to the successor list.
+                successor = ((next_node, successorVisitedCorners), action, 1)
+                successors.append(successor)
+
+        self._expanded += 1  # DO NOT CHANGE
+
+        return successors
+
+    def getCostOfActions(self, actions):
+        """
+        Returns the cost of a particular sequence of actions.  If those actions
+        include an illegal move, return 999999.  This is implemented for you.
+        """
+        if actions == None: return 999999
+        x, y = self.startingPosition
+        for action in actions:
+            dx, dy = Actions.directionToVector(action)
+            x, y = int(x + dx), int(y + dy)
+            if self.walls[x][y]: return 999999
+        return len(actions)
+
+
+
+class FoodSearchProblem2:
+    """
+    A search problem associated with finding the a path that collects all of the
+    food (dots) in a Pacman game.
+    A search state in this problem is a tuple ( pacmanPosition, foodGrid ) where
+      pacmanPosition: a tuple (x,y) of integers specifying Pacman's position
+      foodGrid:       a Grid (see game.py) of either True or False, specifying remaining food
+    """
+    def __init__(self, startingGameState):
+        self.start = (startingGameState.getPacmanPosition(), startingGameState.getFood())
+        self.walls = startingGameState.getWalls()
+        self.startingGameState = startingGameState
+        self._expanded = 0 # DO NOT CHANGE
+        self.heuristicInfo = {} # A dictionary for the heuristic to store information
+        # new
+        self.goal=(1,1)
+        self.goals=[]
+        #self.walls = gameState.getWalls()
+        #self.startState = gameState.getPacmanPosition()
+
+        n=0
+        try:
+            for j in range(1, 40):
+                n=j
+                x=startingGameState.hasWall(1, j)
+        except:
+            n=n
+        m=0
+        try:
+            for i in range(1, 40):
+                m=i
+                x=startingGameState.hasWall(i, 1)
+        except:
+            m=m
+        print('[R9] [R20] maze dimension: ',m,'x',n)
+
+        alreadyFound=False
+        for i in range(1,m):
+            for j in range(1,n):
+                if (startingGameState.hasFood(i,j)):
+                    if(startingGameState.getNumFood()==1 and alreadyFound):
+                        self.goal=(i,j)
+                        alreadyFound=True
+                        break
+                    else:
+                        x=(i,j)
+                        self.goals.append(x)
+
+        #print('goals',self.getFoodPositions())
+
+        #x=getFoodPosition(gameState)
+        #print("food positions: " )
+        print("[R12] Initial position of pacman is "+str(startingGameState.getPacmanPosition()))
+        print("[R10] [R15] Number of foods is "+str(startingGameState.getNumFood()))
+        if(startingGameState.getNumFood()>1):
+            print("[R10] [R15] Final goal (Food) positions are ", self.goals)
+        else:
+            print("[R10] [R15] Final goal (Food) position is "+str(self.goals))
+        print("[R11] Ghost Positions is/are "+str(startingGameState.getGhostPositions()))
+
+
+
+    def getStartState(self):
+        return self.start
+
+    def isGoalState(self, state):
+        return state[1].count() == 0
+
+    def getSuccessors(self, state):
+        "Returns successor states, the actions they require, and a cost of 1."
+        successors = []
+        self._expanded += 1 # DO NOT CHANGE
+        for direction in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
+            x,y = state[0]
+            dx, dy = Actions.directionToVector(direction)
+            nextx, nexty = int(x + dx), int(y + dy)
+            if not self.walls[nextx][nexty]:
+                nextFood = state[1].copy()
+                nextFood[nextx][nexty] = False
+                successors.append( ( ((nextx, nexty), nextFood), direction, 1) )
+        return successors
+
+    def getSuccessors2(self, state):
+        "Returns successor states, the actions they require, and a cost of 1."
+        successors = []
+        self._expanded += 1 # DO NOT CHANGE
+        for direction in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
+            print('search2agent state=',state)
+            x,y = state.copy()
+            dx, dy = Actions.directionToVector(direction)
+            nextx, nexty = int(x + dx), int(y + dy)
+            if not self.walls[nextx][nexty]:
+                nextFood = state
+                nextFood[nextx][nexty] = False
+                successors.append( ( ((nextx, nexty), nextFood), direction, 1) )
+        return successors
+
+    def getCostOfActions(self, actions):
+        """Returns the cost of a particular sequence of actions.  If those actions
+        include an illegal move, return 999999"""
+        x,y= self.getStartState()[0]
+        cost = 0
+        for action in actions:
+            # figure out the next state and see whether it's legal
+            dx, dy = Actions.directionToVector(action)
+            x, y = int(x + dx), int(y + dy)
+            if self.walls[x][y]:
+                return 999999
+            cost += 1
+        return cost
+
+    def getFoodPositions(self):
+        return self.goals
+
+
+
 
 class StayEastSearchAgent2(Search2Agent):
     """
@@ -306,12 +535,14 @@ class StayWestSearchAgent2(Search2Agent):
 
 def manhattanHeuristic(position, problem, info={}):
     "The Manhattan distance heuristic for a PositionSearchProblem"
-    xy1 = position
-    xy2 = problem.goals[problem.gameState.getNumFood()-problem.remainingFoods]
+    xy1 = position[0]
+    xy2 = problem.goal
     return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
 
 def euclideanHeuristic(position, problem, info={}):
     "The Euclidean distance heuristic for a PositionSearchProblem"
-    xy1 = position
-    xy2 = problem.goals[problem.gameState.getNumFood() - problem.remainingFoods]
+    xy1 = position[0]
+    xy2 = problem.goal
     return ( (xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2 ) ** 0.5
+
+
